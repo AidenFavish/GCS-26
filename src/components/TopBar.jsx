@@ -5,6 +5,7 @@ import ArmedStatus from './ArmedStatus'
 import EStopStatus from './EStopStatus'
 import { useData } from '../context/DataContext'
 import { useTheme } from '../context/ThemeContext'
+import { useTileCache } from '../context/TileCacheContext'
 
 function fmtTime(ts) {
   const d = new Date(ts)
@@ -15,6 +16,7 @@ export default function TopBar() {
   const data = useData()
   const navigate = useNavigate()
   const { theme, toggle } = useTheme()
+  const { captureEnabled, offlineOnly } = useTileCache()
   return (
     <header
       style={{
@@ -40,6 +42,22 @@ export default function TopBar() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 15, justifySelf: 'center', flexWrap: 'wrap' }}>
         <ArmedStatus armed={data.armed} />
         <EStopStatus estopOn={data.estopOn} armed={data.armed} />
+        {captureEnabled && !offlineOnly && (
+          <div
+            style={{
+              background: '#2563eb',
+              color: 'white',
+              padding: '6px 10px',
+              borderRadius: 6,
+              fontWeight: 700,
+              letterSpacing: 0.5,
+              boxShadow: 'inset 0 -2px 0 rgba(0,0,0,0.2)'
+            }}
+            title="Downloading map tiles"
+          >
+            Downloading tiles…
+          </div>
+        )}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifySelf: 'end', flexWrap: 'wrap' }}>
         <Battery soc={data.batterySoc} />

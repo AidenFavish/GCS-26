@@ -3,6 +3,7 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { DataProvider } from './context/DataContext'
 import { ThemeProvider } from './context/ThemeContext'
+import { TileCacheProvider } from './context/TileCacheContext'
 import TopBar from './components/TopBar'
 import Sidebar from './components/Sidebar/Sidebar'
 import MapView from './components/MapView'
@@ -30,14 +31,16 @@ export default function App() {
   return (
     <BrowserRouter>
       <ThemeProvider>
-        <DataProvider>
-          <TopBar />
-          <Routes>
-            <Route path="/" element={<GcsHome waypoints={waypoints} geofence={geofence} />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/plan" element={<PlanWaypoints savedWaypoints={waypoints} geofence={geofence} onSend={setWaypoints} onSetGeofence={setGeofence} onClearPlan={() => setWaypoints([])} />} />
-          </Routes>
-        </DataProvider>
+        <TileCacheProvider>
+          <DataProvider>
+            <TopBar />
+            <Routes>
+              <Route path="/" element={<GcsHome waypoints={waypoints} geofence={geofence} />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/plan" element={<PlanWaypoints savedWaypoints={waypoints} geofence={geofence} onSend={setWaypoints} onSetGeofence={setGeofence} onClearPlan={() => setWaypoints([])} />} />
+            </Routes>
+          </DataProvider>
+        </TileCacheProvider>
       </ThemeProvider>
     </BrowserRouter>
   )
