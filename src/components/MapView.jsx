@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Circle, CircleMarker, Polyline, Marker, useMap
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useData } from '../context/DataContext'
+import { useTileCache } from '../context/TileCacheContext'
 
 function AutoCenter({ waypoints, fallback }) {
   const map = useMap()
@@ -26,6 +27,7 @@ const WP_RADIUS_M = 75  // The waypoint radius in meters
 
 export default function MapView({ waypoints, geofence = [] }) {
   const data = useData()
+  const { captureEnabled, offlineOnly } = useTileCache()
   const center = useMemo(() => {
     return waypoints.length > 0 ? [waypoints[waypoints.length - 1].lat, waypoints[waypoints.length - 1].lon] : [37.7749, -122.4194]
   }, [waypoints])
@@ -40,10 +42,16 @@ export default function MapView({ waypoints, geofence = [] }) {
     return L.divIcon({ html: svg, className: 'arrow-icon', iconSize: [size, size], iconAnchor: [size/2, size/2] })
   }, [data.heading])
 
+  const tileUrl = offlineOnly
+    ? '/offline-tiles/{z}/{x}/{y}.png'
+    : (captureEnabled && import.meta.env.DEV
+        ? '/tile-proxy/{z}/{x}/{y}.png'
+        : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+
   return (
     <div style={{ height: '100%', width: '100%' }}>
       <MapContainer center={center} zoom={6} keyboard={false} style={{ height: '100%', width: '100%', outline: 'none' }}>
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
+        <TileLayer url={tileUrl} attribution="&copy; OpenStreetMap contributors" />
         <AutoCenter waypoints={waypoints} fallback={center} />
         {waypoints.map((wp, idx) => (
           <React.Fragment key={idx}>
