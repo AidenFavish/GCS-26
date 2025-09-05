@@ -1,0 +1,19 @@
+/* App layout */
+.app-shell {
+  display: flex;
+  flex: 1;
+  min-height: 0; /* allow children to size and scroll */
+}
+
+.app-main {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* allow map to flex without overflow */
+}
+
+.main-content {
+  flex: 1;
+  min-height: 0;
+}

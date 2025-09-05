@@ -1,0 +1,68 @@
+:root {
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --panel-muted: #f9fafb;
+  --border: #e5e7eb;
+  --border-strong: #374151;
+  --text: #111827;
+  --muted: #6b7280;
+  --primary: #111827;
+  --button-text: #ffffff;
+  --track: #f3f4f6;
+  --horizon-line: #f9fafb;
+  --mode-button: #afb4c0;
+
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme="dark"] {
+  --bg: #0b1020;
+  --panel: #10172a;
+  --panel-muted: #0f172a;
+  --border: #1f2a44;
+  --border-strong: #374151;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --primary: #2563eb;
+  --button-text: #ffffff;
+  --track: #111827;
+  --horizon-line: #e5e7eb;
+  --mode-button: #27324b;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* E-Stop flashing helper */
+@keyframes estop-flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+.estop-flash {
+  animation: estop-flash 0.5s ease-in-out infinite;
+}
+
+button { font: inherit; }
+
+/* Ensure Leaflet never overlays the sticky top bar */
+.leaflet-container {
+  z-index: 0;
+  outline: none;
+}
