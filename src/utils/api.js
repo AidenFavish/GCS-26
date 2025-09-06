@@ -1,6 +1,9 @@
+const BASE = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/$/, '')
+
 export async function postMode(mode) {
   try {
-    await fetch('/api/mode', {
+    const url = BASE ? `${BASE}/api/mode` : '/api/mode'
+    await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mode }),
@@ -10,4 +13,3 @@ export async function postMode(mode) {
     // console.warn('postMode failed', e)
   }
 }
-
