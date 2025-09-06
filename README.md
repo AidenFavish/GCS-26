@@ -11,3 +11,15 @@ npm install
 
 npm install leaflet react-leaflet
 ```
+
+## How to use
+1. Open up a new terminal and run:
+```bash
+export VITE_BACKEND_URL=http://localhost:8000
+npm run dev
+```
+
+2. At the same time, open another terminal and run:
+```bash
+uvicorn server.main:app --reload --port 8000
+```
