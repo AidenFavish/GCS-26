@@ -21,14 +21,30 @@ export function useBackendTelemetry() {
           const newStatus = msg.status
           const shouldAppend = typeof newStatus === 'string' ? newStatus.length > 0 : Boolean(newStatus)
 
+          // Build/extend position track from currentLat/currentLon in messages
+          const prevTrack = (prev && prev.positionTrack) || []
+          const hasLat = Number.isFinite(msg.currentLat)
+          const hasLon = Number.isFinite(msg.currentLon)
+          let nextTrack = prevTrack
+          if (hasLat && hasLon) {
+            const pt = { lat: msg.currentLat, lon: msg.currentLon }
+            nextTrack = [...prevTrack, pt]
+            if (nextTrack.length > 2000) nextTrack = nextTrack.slice(-2000)
+          }
+
           if (!prev) {
-            return { ...msg, statusMessages: shouldAppend ? [newStatus] : [] }
+            return {
+              ...msg,
+              statusMessages: shouldAppend ? [newStatus] : [],
+              positionTrack: nextTrack,
+            }
           }
 
           return {
             ...prev,
             ...msg,
             statusMessages: shouldAppend ? [...prevStatus, newStatus].slice(-300) : prevStatus, // keep last 300
+            positionTrack: nextTrack,
           }
         })
       } catch {}
