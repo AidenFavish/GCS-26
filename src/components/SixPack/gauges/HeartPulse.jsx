@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useData } from '../../../context/DataContext'
 
 export default function HeartPulse() {
-  const { heartbeat } = useData()
+  const { heartbeat, hb_hz } = useData()
   const [pulsing, setPulsing] = useState(false)
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function HeartPulse() {
             pointerEvents: 'none',
           }}
         >
-          {heartbeat + ' hz'}
+          {hb_hz}
         </div>
       </div>
       <div style={{color: 'rgba(0,0,0,0)'}}>Spacer</div>

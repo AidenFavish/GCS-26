@@ -35,6 +35,7 @@ export function useDataStream() {
     roll: 5,
     pitch: -2,
     heartbeat: 0,
+    hb_hz: '1.00 hz'
   }))
 
   const t = useRef(0)
@@ -89,6 +90,7 @@ export function useDataStream() {
           roll: newRoll,
           pitch: newPitch,
           heartbeat: prev.heartbeat + 1,
+          hb_hz: '1.00 hz'
         }
       })
     }, 1000)
