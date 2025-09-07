@@ -16,13 +16,19 @@ export function useBackendTelemetry() {
       try {
         const msg = JSON.parse(ev.data)
         setData((prev) => {
+          // Normalize status handling: don't append empty-string or falsy statuses
+          const prevStatus = (prev && prev.statusMessages) || []
+          const newStatus = msg.status
+          const shouldAppend = typeof newStatus === 'string' ? newStatus.length > 0 : Boolean(newStatus)
+
           if (!prev) {
-            return { ...msg, statusMessages: msg.status ? [msg.status] : [] }
+            return { ...msg, statusMessages: shouldAppend ? [newStatus] : [] }
           }
+
           return {
             ...prev,
             ...msg,
-            statusMessages: [...(prev.statusMessages || []), msg.status].slice(-300),
+            statusMessages: shouldAppend ? [...prevStatus, newStatus].slice(-300) : prevStatus, // keep last 300
           }
         })
       } catch {}
