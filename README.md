@@ -10,6 +10,9 @@ cd gcs_2026
 npm install
 
 npm install leaflet react-leaflet
+
+npm install react-router-dom
+
 ```
 
 ## How to use
