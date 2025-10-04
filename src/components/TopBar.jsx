@@ -8,6 +8,7 @@ import { useTheme } from '../context/ThemeContext'
 import { useTileCache } from '../context/TileCacheContext'
 import { CircleArrowDown } from 'lucide-react'
 import ThemeTogglePill from './ThemeToggle'
+import { Cog } from 'lucide-react'
 
 function fmtTime(ts) {
   const d = new Date(ts)
@@ -70,12 +71,12 @@ export default function TopBar() {
             background: 'var(--primary)',
             color: 'var(--button-text)',
             border: 0,
-            padding: '8px 12px',
-            borderRadius: 6,
+            padding: '4px 8px',
+            borderRadius: 10,
             cursor: 'pointer',
           }}
         >
-          Settings
+          <Cog size={25} style={{transform: 'translate(0px, 3px'}}/>
         </button>
       </div>
     </header>
