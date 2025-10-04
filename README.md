@@ -13,6 +13,8 @@ npm install leaflet react-leaflet
 
 npm install react-router-dom
 
+npm i lucide-react
+
 ```
 
 ## How to use

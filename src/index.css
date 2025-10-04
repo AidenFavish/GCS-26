@@ -59,6 +59,15 @@ body {
   animation: estop-flash 0.5s ease-in-out infinite;
 }
 
+@keyframes download-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.50; }
+}
+
+.download-pulse {
+  animation: download-pulse 1.0s ease-in-out infinite;
+}
+
 button { font: inherit; }
 
 /* Ensure Leaflet never overlays the sticky top bar */
