@@ -7,6 +7,7 @@ import { useData } from '../context/DataContext'
 import { useTheme } from '../context/ThemeContext'
 import { useTileCache } from '../context/TileCacheContext'
 import { CircleArrowDown } from 'lucide-react'
+import ThemeTogglePill from './ThemeToggle'
 
 function fmtTime(ts) {
   const d = new Date(ts)
@@ -62,20 +63,7 @@ export default function TopBar() {
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 25, justifySelf: 'end', flexWrap: 'wrap' }}>
         <Battery soc={data.batterySoc} />
-        <button
-          onClick={toggle}
-          title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-          style={{
-            background: 'var(--panel-muted)',
-            color: 'var(--text)',
-            border: '1px solid var(--border)',
-            padding: '6px 10px',
-            borderRadius: 6,
-            cursor: 'pointer',
-          }}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
+        <ThemeTogglePill />
         <button
           onClick={() => navigate('/settings')}
           style={{
