@@ -5,6 +5,7 @@ import { useData } from '../../context/DataContext'
 import ChecklistBox from './ChecklistBox'
 import { useState, useEffect } from "react"
 import CalibrationBox from './CalibrationBox'
+import PeripheralsBox from './PeripheralsBox'
 
 export default function ChecklistSidebar({ }) {
   const navigate = useNavigate();
@@ -90,7 +91,7 @@ export default function ChecklistSidebar({ }) {
     </header>
 
       <ChecklistBox checked={checkNum >= 1} selected={selectNum == 1} height={200} setCheck={setCheck(1)} titleText={'Calibrations'} content={<CalibrationBox />}/>
-      <ChecklistBox checked={checkNum >= 2} selected={selectNum == 2} height={200} setCheck={setCheck(2)} titleText={'Calibrations'} content={<CalibrationBox />}/>
+      <ChecklistBox checked={checkNum >= 2} selected={selectNum == 2} height={200} setCheck={setCheck(2)} titleText={'Peripherals'} content={<PeripheralsBox />}/>
 
       <div style={{ height: 8 }} />
     </aside>
