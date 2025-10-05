@@ -9,6 +9,7 @@ import { useTileCache } from '../context/TileCacheContext'
 import { CircleArrowDown } from 'lucide-react'
 import ThemeTogglePill from './ThemeToggle'
 import { Cog } from 'lucide-react'
+import Payloads from './Payloads'
 
 function fmtTime(ts) {
   const d = new Date(ts)
@@ -63,6 +64,7 @@ export default function TopBar() {
         )}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 25, justifySelf: 'end', flexWrap: 'wrap' }}>
+        <Payloads />
         <Battery soc={data.batterySoc} />
         <ThemeTogglePill />
         <button
