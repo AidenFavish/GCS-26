@@ -3,13 +3,29 @@ import { useNavigate } from 'react-router-dom'
 import { Wifi, WifiOff, XIcon, CheckIcon } from 'lucide-react'
 import { useData } from '../../context/DataContext'
 import ChecklistBox from './ChecklistBox'
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
+import CalibrationBox from './CalibrationBox'
 
 export default function ChecklistSidebar({ }) {
   const navigate = useNavigate();
 
   const data = useData();
-  const [height, setHeight] = useState(window.innerHeight);
+  const [height] = useState(window.innerHeight);
+
+  const [checkNum, setCheckNum] = useState(0)
+  const [selectNum, setSelectNum] = useState(1)
+
+  function setCheckNum1(num) {
+    if (checkNum + 1 == num) {
+      setCheckNum(num)
+      setSelectNum(num + 1)
+    } else if (checkNum == num) {
+      setCheckNum(num - 1)
+      setSelectNum(num)
+    }
+  }
+
+  const setCheck = (num) => () => setCheckNum1(num)
 
   let telementryIcon, jetsonIcon;
   telementryIcon = data.telemConnected ? <CheckIcon size={20} style={{transform:'translate(0px,4px)'}} /> : <XIcon size={20} style={{transform:'translate(0px,4px)'}} />;
@@ -21,7 +37,7 @@ export default function ChecklistSidebar({ }) {
         width: 340,
         display: 'flex',
         flexDirection: 'column',
-        gap: 6,
+        gap: 12,
         padding: 12,
         borderRight: '1px solid var(--border)',
         background: 'var(--panel-muted)',
@@ -73,8 +89,8 @@ export default function ChecklistSidebar({ }) {
 
     </header>
 
-      <ChecklistBox />
-      <ChecklistBox />
+      <ChecklistBox checked={checkNum >= 1} selected={selectNum == 1} height={200} setCheck={setCheck(1)} titleText={'Calibrations'} content={<CalibrationBox />}/>
+      <ChecklistBox checked={checkNum >= 2} selected={selectNum == 2} height={200} setCheck={setCheck(2)} titleText={'Calibrations'} content={<CalibrationBox />}/>
 
       <div style={{ height: 8 }} />
     </aside>

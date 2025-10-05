@@ -1,13 +1,8 @@
 import React, { useState } from 'react'
 import { Square, CheckSquare } from 'lucide-react'
 
-export default function ChecklistBox() {
+export default function ChecklistBox({height, titleText, selected, checked, content, setCheck}) {
   const GREEN = '#16a34a'
-
-  const height = 100
-  const titleText = 'Calibrations'
-  const selected = false
-  const checked = true
 
   return (
     <div style={{
@@ -25,7 +20,7 @@ export default function ChecklistBox() {
 
       {/* Right rounded rectangle panel */}
       <div style={{
-        minHeight: 500,
+        minHeight: height,
         background: selected? 'var(--panel-selected)':'var(--panel)',
         border: '1px solid var(--border)',
         borderRadius: 12,
@@ -38,21 +33,23 @@ export default function ChecklistBox() {
         gridTemplateColumns: 'auto 1fr auto',
         alignItems: 'center',
         }}>
-          <div
+          <button
             aria-label={checked ? 'Uncheck' : 'Check'}
             style={checkboxButton}
+            onClick={setCheck}
+            onKeyDown={setCheck}
           >
             {checked ? (
               <CheckSquare size={18} color={GREEN} />
             ) : (
               <Square size={18} color={selected ? 'var(--text)':'var(--mode-button)'} />
             )}
-          </div>
+          </button>
           <h3 style={title}>{titleText}</h3>
           <div aria-hidden style={{ width: 18 }} />
         </div>
-
-        {/* Content area (add your checklist items here) */}
+        <div style={{minHeight: 10}}></div>
+        {content}
         <div style={{ flex: 1 }} />
       </div>
     </div>
@@ -92,7 +89,7 @@ const checkboxButton = {
   width: 28,
   height: 28,
   borderRadius: 6,
-  border: '1px solid var(--border)',
+  border: '2px solid var(--border)',
   background: 'transparent',
   cursor: 'pointer',
 }
