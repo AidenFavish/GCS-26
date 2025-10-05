@@ -72,7 +72,7 @@ export default function PlannerSidebar({ onSend, onSendGeofence, onClearPlan }) 
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <button onClick={() => navigate('/')} style={btnGhost}>← Back</button>
+        <button onClick={() => navigate('/checklist')} style={btnGhost}>← Back</button>
         <div style={{ flex: 1 }} />
         <label style={{ fontSize: 12, color: 'var(--muted)' }}>Geofence</label>
         <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>

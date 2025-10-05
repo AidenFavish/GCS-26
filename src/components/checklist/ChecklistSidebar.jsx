@@ -6,6 +6,9 @@ import ChecklistBox from './ChecklistBox'
 import { useState, useEffect } from "react"
 import CalibrationBox from './CalibrationBox'
 import PeripheralsBox from './PeripheralsBox'
+import WaypointPlanBox from './WaypointPlanBox'
+import StandbyBox from './StandbyBox'
+import StartMissionBox from './StartMissionBox'
 
 export default function ChecklistSidebar({ }) {
   const navigate = useNavigate();
@@ -91,7 +94,10 @@ export default function ChecklistSidebar({ }) {
     </header>
 
       <ChecklistBox checked={checkNum >= 1} selected={selectNum == 1} height={200} setCheck={setCheck(1)} titleText={'Calibrations'} content={<CalibrationBox />}/>
-      <ChecklistBox checked={checkNum >= 2} selected={selectNum == 2} height={200} setCheck={setCheck(2)} titleText={'Peripherals'} content={<PeripheralsBox />}/>
+      <ChecklistBox checked={checkNum >= 2} selected={selectNum == 2} height={150} setCheck={setCheck(2)} titleText={'Peripherals'} content={<PeripheralsBox />}/>
+      <ChecklistBox checked={checkNum >= 3} selected={selectNum == 3} height={200} setCheck={setCheck(3)} titleText={'Waypoint Planinng'} content={<WaypointPlanBox />}/>
+      <ChecklistBox checked={checkNum >= 4} selected={selectNum == 4} height={120} setCheck={setCheck(4)} titleText={'Standby Mission'} content={<StandbyBox />}/>
+      <ChecklistBox checked={checkNum >= 5} selected={selectNum == 5} height={120} setCheck={setCheck(5)} titleText={'Start Mission'} content={<StartMissionBox />}/>
 
       <div style={{ height: 8 }} />
     </aside>
