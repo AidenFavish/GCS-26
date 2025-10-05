@@ -27,11 +27,11 @@ export default function Sidebar({ waypoints }) {
             background: 'var(--primary)',
             color: 'var(--button-text)',
             border: 0,
-            padding: '10px 22px',
-            borderRadius: 16,
+            padding: '8px 18px',
+            borderRadius: 12,
             cursor: 'pointer',
             fontWeight: 700,
-            fontSize: 20
+            fontSize: 18
           }}
         >
           Flight Checklist
