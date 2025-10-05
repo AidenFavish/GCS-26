@@ -20,15 +20,8 @@ export default function Sidebar({ waypoints }) {
         overscrollBehavior: 'contain',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 15, alignSelf: 'center', width: 'fit-content', flexWrap: 'wrap' }}>
-        <ModeButton mode='BRAKE'/>
-        <ModeButton mode='GUIDED'/>
-        <ModeButton mode='RTL'/>
-      </div>
-      <SixPack />
-      <div style={{ height: 8 }} />
       <button
-        onClick={() => navigate('/plan')}
+        onClick={() => navigate('/checklist')}
         style={{
           background: 'var(--primary)',
           color: 'var(--button-text)',
@@ -36,10 +29,20 @@ export default function Sidebar({ waypoints }) {
           padding: '10px 12px',
           borderRadius: 8,
           cursor: 'pointer',
+          fontWeight: 800,
+          fontSize: 20
         }}
       >
-        Plan Waypoints
+        Flight Checklist
       </button>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 15, alignSelf: 'center', width: 'fit-content', flexWrap: 'wrap' }}>
+        <ModeButton mode='BRAKE'/>
+        <ModeButton mode='GUIDED'/>
+        <ModeButton mode='RTL'/>
+      </div>
+      <SixPack />
+      <div style={{ height: 8 }} />
     </aside>
   )
 }

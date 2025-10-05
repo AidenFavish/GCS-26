@@ -35,7 +35,9 @@ export function useDataStream() {
     roll: 5,
     pitch: -2,
     heartbeat: 0,
-    hb_hz: '1.00 hz'
+    hb_hz: '1.00 hz',
+    telemConnected: true,
+    jetsonConnected: true
   }))
 
   const t = useRef(0)
@@ -72,6 +74,8 @@ export function useDataStream() {
         const newLat = clamp(prev.currentLat + dLat, -90, 90)
         const newLon = prev.currentLon + dLon
         const newTrack = [...prev.positionTrack, { lat: newLat, lon: newLon }]
+        const flipTelemConnected = Math.random() < 0.1 ? !prev.telemConnected : prev.telemConnected
+        const flipJetsonConnected = Math.random() < 0.1 ? !prev.jetsonConnected : prev.jetsonConnected
         if (newTrack.length > 2000) newTrack.shift()
         return {
           timestamp: Date.now(),
@@ -90,7 +94,9 @@ export function useDataStream() {
           roll: newRoll,
           pitch: newPitch,
           heartbeat: prev.heartbeat + 1,
-          hb_hz: '1.00 hz'
+          hb_hz: '1.00 hz',
+          telemConnected: flipTelemConnected,
+          jetsonConnected: flipJetsonConnected
         }
       })
     }, 1000)

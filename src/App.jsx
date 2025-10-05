@@ -10,6 +10,7 @@ import MapView from './components/MapView'
 import Settings from './pages/Settings'
 import PlanWaypoints from './pages/PlanWaypoints'
 import BottomBar from './components/BottomBar'
+import Checklist from './pages/Checklist'
 
 function GcsHome({ waypoints, geofence }) {
   return (
@@ -38,6 +39,7 @@ export default function App() {
               <Route path="/" element={<GcsHome waypoints={waypoints} geofence={geofence} />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/plan" element={<PlanWaypoints savedWaypoints={waypoints} geofence={geofence} onSend={setWaypoints} onSetGeofence={setGeofence} onClearPlan={() => setWaypoints([])} />} />
+              <Route path="/checklist" element={<Checklist savedWaypoints={waypoints} geofence={geofence} />} />
             </Routes>
           </DataProvider>
         </TileCacheProvider>

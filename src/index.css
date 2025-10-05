@@ -1,6 +1,7 @@
 :root {
   --bg: #ffffff;
   --panel: #ffffff;
+  --panel-selected: #eaeaea;
   --panel-muted: #f9fafb;
   --border: #e5e7eb;
   --border-strong: #374151;
@@ -24,6 +25,7 @@
 [data-theme="dark"] {
   --bg: #0b1020;
   --panel: #10172a;
+  --panel-selected: #212b469d;
   --panel-muted: #0f172a;
   --border: #1f2a44;
   --border-strong: #374151;
