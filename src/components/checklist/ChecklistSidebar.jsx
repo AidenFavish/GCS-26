@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { Wifi, WifiOff, XIcon, CheckIcon } from 'lucide-react'
 import { useData } from '../../context/DataContext'
 import ChecklistBox from './ChecklistBox'
+import { useState, useEffect } from "react";
 
 export default function ChecklistSidebar({ }) {
   const navigate = useNavigate();
 
   const data = useData();
+  const [height, setHeight] = useState(window.innerHeight);
 
   let telementryIcon, jetsonIcon;
   telementryIcon = data.telemConnected ? <CheckIcon size={20} style={{transform:'translate(0px,4px)'}} /> : <XIcon size={20} style={{transform:'translate(0px,4px)'}} />;
@@ -26,6 +28,8 @@ export default function ChecklistSidebar({ }) {
         overflowY: 'auto',
         overflowX: 'hidden',
         overscrollBehavior: 'contain',
+        zIndex:500,
+        maxHeight:height-80
       }}
     >
       <header
