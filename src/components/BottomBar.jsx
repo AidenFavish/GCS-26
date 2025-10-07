@@ -25,6 +25,12 @@ export default function BottomBar() {
     }
   }, [statusMessages])
 
+  // On page load, auto scroll to bottom
+  useEffect(() => {
+    listRef.current.scrollTop = listRef.current.scrollHeight;
+    listRef2.current.scrollTop = listRef2.current.scrollHeight;
+  }, [])
+
   return (
     <footer
       style={{
