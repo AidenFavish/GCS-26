@@ -8,11 +8,12 @@
   --text: #111827;
   --muted: #6b7280;
   --primary-text: #000000;
-  --primary: #e3c819;
+  --primary: #1457de;
   --button-text: #ffffff;
   --track: #f3f4f6;
   --horizon-line: #f9fafb;
-  --mode-button: #afb4c0;
+  --mode-button: #f0f0f0;
+  --button-pressed: #dcdcdc;
 
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   line-height: 1.5;
@@ -41,6 +42,7 @@
   --track: #202020;
   --horizon-line: #eaeaea;
   --mode-button: #2d2d2d;
+  --button-pressed: #4d4d4d;
 }
 
 body {

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Square, CheckSquare } from 'lucide-react'
 
 export default function ChecklistBox({height, titleText, selected, checked, content, setCheck}) {
-  const GREEN = '#16a34a'
+  const GREEN = 'var(--good-green)'
 
   return (
     <div style={{

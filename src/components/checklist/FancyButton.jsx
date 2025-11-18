@@ -43,8 +43,7 @@ export default function FancyButton({ label = 'Button', color = 'var(--mode-butt
 
   var string_copy = (' ' + color).slice(1);
   const bg = string_copy
-  const bgHover = lighten(bg, 70)
-  const bgActive = darken(bg, 70)
+  const bgHover = lighten(bg, 80)
   const textColor = getContrastText(bg)
 
   const baseStyle = {
@@ -57,7 +56,7 @@ export default function FancyButton({ label = 'Button', color = 'var(--mode-butt
     borderRadius: 8,
     border: `0px solid ${darken(color, 40)}`,
     color: 'var(--primary)',
-    background: hovered ? (pressed ? bgActive : bgHover) : bg,
+    background: hovered ? 'var(--button-pressed)' : bg,
     transition: 'background 120ms ease',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.6 : 1,

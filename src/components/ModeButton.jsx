@@ -18,7 +18,7 @@ export default function ModeButton({ mode = 'GUIDED' }) {
     postMode(target)
   }
 
-  const bg = active ? '#16a34a' : 'var(--mode-button)'
+  const bg = active ? 'var(--good-green)' : 'var(--mode-button)'
   const baseShadow = hover && !active ? 'inset 0 -3px 0 rgba(0,0,0,0.25)' : 'inset 0 -1px 0 rgba(0,0,0,0.2)'
 
   return (
@@ -29,7 +29,7 @@ export default function ModeButton({ mode = 'GUIDED' }) {
       disabled={active}
       style={{
         background: bg,
-        color: '#fff',
+        color: 'var(--text)',
         border: 0,
         padding: '8px 14px',
         borderRadius: 12,
@@ -40,6 +40,7 @@ export default function ModeButton({ mode = 'GUIDED' }) {
         transition: 'box-shadow 150ms ease, transform 120ms ease',
         transform: hover && !active ? 'translateY(-1px)' : 'none',
         userSelect: 'none',
+        fontFamily: 'Helvetica'
       }}
       title={active ? `Mode is already ${target}` : `Switch to ${target}`}
     >

@@ -65,7 +65,7 @@ export default function ThemeTogglePill() {
           width: THUMB_SIZE,
           height: THUMB_SIZE,
           borderRadius: "50%",
-          background: "var(--panel, #fff)",
+          background: "var(--mode-button, #fff)",
           border: "1px solid var(--border)",
           boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
           transform: `translateX(${isLight ? 0 : TRACK_WIDTH - THUMB_SIZE - PADDING * 2}px)`,

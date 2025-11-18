@@ -76,15 +76,15 @@ export default function TopBar() {
         <button
           onClick={() => navigate('/settings')}
           style={{
-            background: 'var(--primary)',
-            color: 'var(--panel)',
+            background: 'var(--mode-button)',
+            color: 'var(--primary)',
             border: 0,
             padding: '1px 4px',
             borderRadius: 20,
             cursor: 'pointer',
           }}
         >
-          <Cog size={25} strokeWidth={3} style={{transform: 'translate(0px, 3px'}}/>
+          <Cog size={25} strokeWidth={2.5} style={{transform: 'translate(0px, 3px'}}/>
         </button>
       </div>
     </header>

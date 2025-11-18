@@ -32,7 +32,7 @@ export default function WaypointPlanBox({ }) {
             <span style={lapBadge}>Total: 450 m</span>
         </header>
         <div style={{height: 10}}></div>
-        <div style={{...lapBadge, gap: 10, display: 'flex', justifyContent: 'center', width: '92%', color: '#16a34a'}}>
+        <div style={{gap: 10, display: 'flex', justifyContent: 'center', width: '92%', color: '#16a34a'}}>
             <span>Geofence Enabled</span>
             <CheckIcon size={20} />
         </div>

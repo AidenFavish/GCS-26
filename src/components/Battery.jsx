@@ -27,7 +27,7 @@ export default function Battery({ soc = 100, width = 60, height = 24 }) {
           style={{
             width: bodyWidth,
             height: height - 6,
-            border: '2px solid var(--border-strong)',
+            border: '2px solid var(--border)',
             borderRight: 0,
             borderRadius: 4,
             overflow: 'hidden',
@@ -47,15 +47,15 @@ export default function Battery({ soc = 100, width = 60, height = 24 }) {
           style={{
             width: capWidth,
             height: Math.round(height * 0.5),
-            border: '2px solid var(--border-strong)',
+            border: '2px solid var(--border)',
             borderLeft: 0,
             borderRadius: '0 3px 3px 0',
             alignSelf: 'center',
-            background: 'var(--border-strong)',
+            background: 'var(--border)',
           }}
         />
       </div>
-      <span style={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, fontWeight: 700 }}>{pct}%</span>
+      <span style={{ fontVariantNumeric: 'tabular-nums', fontSize: 14, fontWeight: 700 }}>{pct}%</span>
     </div>
   )
 }

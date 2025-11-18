@@ -83,7 +83,7 @@ export default function CompassArc({ heading = 0, airspeed = 0, groundSpeed = 0 
   const normalized = normalizeHeading(heading)
   const ticks = useMemo(() => buildTicks(normalized), [normalized])
   const labels = useMemo(() => buildLabels(normalized), [normalized])
-  const formattedHeading = Math.round(normalized).toString().padStart(3, '0')
+  const formattedHeading = Math.round(normalized).toString()
   const airspeedLabel = formatMetric(airspeed, ' m/s')
   const speedLabel = formatMetric(groundSpeed, ' m/s')
 

@@ -166,7 +166,7 @@
 }
 
 .tapeReadout {
-  background: rgba(0, 0, 0, 0.35);
+  background: var(--mode-button);
   border-radius: 12px;
   padding: 6px 12px;
   display: flex;
@@ -174,7 +174,7 @@
   gap: 6px;
   font-size: 18px;
   font-weight: 600;
-  color: #fdfdfd;
+  color: var(--text);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -285,7 +285,7 @@
   font-size: 26px;
   letter-spacing: 0.08em;
   font-weight: 600;
-  color: #fdfdfd;
+  color: var(--text);
 }
 
 .compassDial {
@@ -321,7 +321,7 @@
 .compassCorner-value {
   font-size: 13px;
   font-weight: 600;
-  color: #fdfdfd;
+  color: var(--text);
   letter-spacing: 0.04em;
 }
 

@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import { useData } from '../context/DataContext'
+import { Wifi, WifiOff, XIcon, CheckIcon } from 'lucide-react'
 
 export default function BottomBar() {
   const { statusMessages } = useData()
+  const data = useData()
   const listRef = useRef(null)
   const listRef2 = useRef(null)
 
@@ -31,6 +33,10 @@ export default function BottomBar() {
     listRef2.current.scrollTop = listRef2.current.scrollHeight;
   }, [])
 
+  let telementryIcon, jetsonIcon;
+  telementryIcon = data.telemConnected ? <CheckIcon size={20} style={{transform:'translate(0px,4px)'}} /> : <XIcon size={20} style={{transform:'translate(0px,4px)'}} />;
+  jetsonIcon = data.jetsonConnected ? <Wifi size={20} style={{transform:'translate(0px,4px)'}} /> : <WifiOff size={20} style={{transform:'translate(0px,4px)'}} />;
+
   return (
     <footer
       style={{
@@ -45,7 +51,12 @@ export default function BottomBar() {
       }}
     >
       <div style={{border: '0.5px solid var(--border)'}}>
-        <div style={{ padding: '6px 10px', fontSize: 12, color: 'var(--muted)' }}>Telemetry</div>
+        <div style={{ padding: '6px 10px', fontSize: 12, color: 'var(--muted)' }}>
+          <div style={{ color: data.telemConnected ? '#16a34a' : '#b91c1c', justifySelf: 'center', alignSelf: 'center'}}>
+            {telementryIcon}
+            <label style={{paddingLeft: '5px', fontWeight: 500}}>Telemetry</label>
+          </div>
+        </div>
         <div
           ref={listRef}
           style={{
@@ -70,7 +81,12 @@ export default function BottomBar() {
       </div>
 
       <div style={{border: '0.5px solid var(--border)'}}>
-        <div style={{ padding: '6px 10px', fontSize: 12, color: 'var(--muted)' }}>Jetson</div>
+        <div style={{ padding: '6px 10px', fontSize: 12, color: 'var(--muted)' }}>
+          <div style={{ color: data.jetsonConnected ? '#16a34a' : '#b91c1c', justifySelf: 'center', alignSelf: 'center'}}>
+            {jetsonIcon}
+            <label style={{paddingLeft: '5px', fontWeight: 500}}>Jetson</label>
+          </div>
+        </div>
         <div
           ref={listRef2}
           style={{
