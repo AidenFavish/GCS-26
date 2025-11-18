@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Wifi, WifiOff, XIcon, CheckIcon } from 'lucide-react'
 import { useData } from '../../context/DataContext'
 import ChecklistBox from './ChecklistBox'
-import { useState, useEffect } from "react"
 import CalibrationBox from './CalibrationBox'
 import PeripheralsBox from './PeripheralsBox'
 import WaypointPlanBox from './WaypointPlanBox'
@@ -14,7 +13,7 @@ export default function ChecklistSidebar({ }) {
   const navigate = useNavigate();
 
   const data = useData();
-  const [height] = useState(window.innerHeight);
+  const availableHeight = 'calc(100vh - var(--top-bar-height))'
 
   const [checkNum, setCheckNum] = useState(0)
   const [selectNum, setSelectNum] = useState(1)
@@ -49,7 +48,11 @@ export default function ChecklistSidebar({ }) {
         overflowX: 'hidden',
         overscrollBehavior: 'contain',
         zIndex:500,
-        maxHeight:height-80
+        height: availableHeight,
+        maxHeight: availableHeight,
+        minHeight: 0,
+        flexShrink: 0,
+        boxSizing: 'border-box'
       }}
     >
       <header

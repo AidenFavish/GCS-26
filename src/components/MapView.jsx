@@ -48,8 +48,10 @@ export default function MapView({ waypoints, geofence = [] }) {
         ? '/tile-proxy/{z}/{x}/{y}.png'
         : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
 
+  const mapHeight = 'calc(100vh - var(--top-bar-height) - var(--bottom-bar-height))'
+
   return (
-    <div style={{ height: '100%', width: '100%' }}>
+    <div style={{ width: '100%', flex: 1, minHeight: 0, height: mapHeight }}>
       <MapContainer center={center} zoom={6} keyboard={false} style={{ height: '100%', width: '100%', outline: 'none' }}>
         <TileLayer url={tileUrl} attribution="&copy; OpenStreetMap contributors" />
         <AutoCenter waypoints={waypoints} fallback={center} />

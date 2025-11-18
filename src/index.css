@@ -14,6 +14,8 @@
   --horizon-line: #f9fafb;
   --mode-button: #f0f0f0;
   --button-pressed: #dcdcdc;
+  --top-bar-height: 0px;
+  --bottom-bar-height: 0px;
 
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   line-height: 1.5;

@@ -1,12 +1,15 @@
 import React, { useEffect, useRef } from 'react'
 import { useData } from '../context/DataContext'
 import { Wifi, WifiOff, XIcon, CheckIcon } from 'lucide-react'
+import { useElementHeightVar } from '../hooks/useElementHeightVar'
 
 export default function BottomBar() {
   const { statusMessages } = useData()
   const data = useData()
   const listRef = useRef(null)
   const listRef2 = useRef(null)
+  const footerRef = useRef(null)
+  useElementHeightVar(footerRef, '--bottom-bar-height')
 
   // Auto-scroll to bottom when new items arrive if user is near bottom
   useEffect(() => {
@@ -39,6 +42,7 @@ export default function BottomBar() {
 
   return (
     <footer
+      ref={footerRef}
       style={{
         display: 'grid',
         gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)',
@@ -113,4 +117,3 @@ export default function BottomBar() {
     </footer>
   )
 }
-

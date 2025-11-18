@@ -36,6 +36,7 @@ export default function PlannerSidebar({ onSend, onSendGeofence, onClearPlan }) 
   const [rows, setRows] = useState([])
   const [fenceName, setFenceName] = useState('ARC Main Field West')
   const fenceNames = useMemo(() => Object.keys(GEOFENCES), [])
+  const availableHeight = 'calc(100vh - var(--top-bar-height))'
 
   function addRow() {
     setRows((r) => [...r, { lat: '', lon: '', alt: '' }])
@@ -69,6 +70,11 @@ export default function PlannerSidebar({ onSend, onSendGeofence, onClearPlan }) 
         overflowY: 'auto',
         overflowX: 'hidden',
         overscrollBehavior: 'contain',
+        height: availableHeight,
+        maxHeight: availableHeight,
+        minHeight: 0,
+        flexShrink: 0,
+        boxSizing: 'border-box',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>

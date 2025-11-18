@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Battery from './Battery'
 import ArmedStatus from './ArmedStatus'
@@ -12,6 +12,7 @@ import { Cog } from 'lucide-react'
 import Payloads from './Payloads'
 import forgeLogo from '../assets/forge_print_yellow.png'
 import FancyButton from './checklist/FancyButton'
+import { useElementHeightVar } from '../hooks/useElementHeightVar'
 
 function fmtTime(ts) {
   const d = new Date(ts)
@@ -23,8 +24,11 @@ export default function TopBar() {
   const navigate = useNavigate()
   const { theme, toggle } = useTheme()
   const { captureEnabled, offlineOnly } = useTileCache()
+  const headerRef = useRef(null)
+  useElementHeightVar(headerRef, '--top-bar-height')
   return (
     <header
+      ref={headerRef}
       style={{
         display: 'grid',
         gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)',

@@ -6,6 +6,7 @@ import StatDisplay from '../StatDisplay/StatDisplay'
 
 export default function Sidebar({ waypoints }) {
   const navigate = useNavigate()
+  const availableHeight = 'calc(100vh - var(--top-bar-height))'
   return (
     <aside
       style={{
@@ -19,6 +20,11 @@ export default function Sidebar({ waypoints }) {
         overflowY: 'auto',
         overflowX: 'hidden',
         overscrollBehavior: 'contain',
+        height: availableHeight,
+        maxHeight: availableHeight,
+        minHeight: 0,
+        flexShrink: 0,
+        boxSizing: 'border-box',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 15, alignSelf: 'center', width: 'fit-content', flexWrap: 'wrap' }}>
