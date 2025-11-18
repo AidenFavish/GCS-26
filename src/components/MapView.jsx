@@ -23,7 +23,48 @@ function AutoCenter({ waypoints, fallback }) {
   return null
 }
 
+function SpacebarFocus({ target, zoom }) {
+  const map = useMap()
+  const targetRef = React.useRef(null)
+  const zoomRef = React.useRef(zoom)
+
+  React.useEffect(() => {
+    zoomRef.current = zoom
+  }, [zoom])
+
+  React.useEffect(() => {
+    const hasTarget = Array.isArray(target) && target.length === 2 && Number.isFinite(target[0]) && Number.isFinite(target[1])
+    targetRef.current = hasTarget ? target : null
+  }, [target])
+
+  React.useEffect(() => {
+    if (!map) return
+
+    function isTypingInInput(element) {
+      if (!element) return false
+      if (element.isContentEditable) return true
+      const tag = element.tagName
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT'
+    }
+
+    function handleKeyDown(event) {
+      if (event.defaultPrevented) return
+      if (event.code !== 'Space' && event.key !== ' ') return
+      if (isTypingInInput(document.activeElement)) return
+      const targetPosition = targetRef.current
+      if (!targetPosition) return
+      event.preventDefault()
+      map.setView(targetPosition, zoomRef.current, { animate: true })
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [map])
+  return null
+}
+
 const WP_RADIUS_M = 75  // The waypoint radius in meters
+const TARGET_FOCUS_ZOOM = 14
 
 export default function MapView({ waypoints, geofence = [] }) {
   const data = useData()
@@ -31,6 +72,17 @@ export default function MapView({ waypoints, geofence = [] }) {
   const center = useMemo(() => {
     return waypoints.length > 0 ? [waypoints[waypoints.length - 1].lat, waypoints[waypoints.length - 1].lon] : [37.7749, -122.4194]
   }, [waypoints])
+
+  const targetPosition = useMemo(() => {
+    if (waypoints.length > 0) {
+      const wp = waypoints[waypoints.length - 1]
+      return [wp.lat, wp.lon]
+    }
+    if (Number.isFinite(data.currentLat) && Number.isFinite(data.currentLon)) {
+      return [data.currentLat, data.currentLon]
+    }
+    return null
+  }, [waypoints, data.currentLat, data.currentLon])
 
   const arrowIcon = useMemo(() => {
     const size = 28
@@ -55,6 +107,7 @@ export default function MapView({ waypoints, geofence = [] }) {
       <MapContainer center={center} zoom={6} keyboard={false} style={{ height: '100%', width: '100%', outline: 'none' }}>
         <TileLayer url={tileUrl} attribution="&copy; OpenStreetMap contributors" />
         <AutoCenter waypoints={waypoints} fallback={center} />
+        <SpacebarFocus target={targetPosition} zoom={TARGET_FOCUS_ZOOM} />
         {waypoints.map((wp, idx) => (
           <React.Fragment key={idx}>
             <Circle center={[wp.lat, wp.lon]} radius={WP_RADIUS_M} pathOptions={{ color: '#2563eb', fillOpacity: 0.05 }} />

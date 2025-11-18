@@ -63,5 +63,6 @@ const cardStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   flexDirection: 'column',
+  width: '130px',
+  height: '150px',
 }
-

@@ -1,13 +1,13 @@
 .statDisplay {
   --pitch-notch-inset: 42%;
-  width: 100%;
+  width: 320;
   display: flex;
   flex-direction: column;
   gap: 9px;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 12px 8px 0px 8px;
+  padding: 12px 2px 2px 0px;
 }
 
 .statDisplay-top {
@@ -168,11 +168,11 @@
 .tapeReadout {
   background: var(--mode-button);
   border-radius: 12px;
-  padding: 6px 12px;
+  padding: 3px 6px;
   display: flex;
   align-items: baseline;
   gap: 6px;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -184,7 +184,7 @@
 }
 
 .tapeWindow {
-  width: 80%;
+  width: 60%;
   min-width: 50px;
   border-radius: 12px;
   border: 1px solid var(--border);
@@ -220,7 +220,7 @@
   content: '';
   position: absolute;
   height: 2px;
-  width: 12px;
+  width: 6px;
   background: rgba(255, 255, 255, 0.35);
   top: 50%;
   transform: translateY(-50%);
@@ -241,7 +241,7 @@
 
 .tapeTick-major::before,
 .tapeTick-major::after {
-  width: 16px;
+  width: 8px;
   background: #fff;
 }
 

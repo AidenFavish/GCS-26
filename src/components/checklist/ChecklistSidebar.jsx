@@ -35,7 +35,8 @@ export default function ChecklistSidebar({ }) {
   jetsonIcon = data.jetsonConnected ? <Wifi size={20} style={{transform:'translate(0px,4px)'}} /> : <WifiOff size={20} style={{transform:'translate(0px,4px)'}} />;
 
   return (
-    <aside
+    <div
+      className="sidebarShell"
       style={{
         width: 340,
         display: 'flex',
@@ -103,7 +104,7 @@ export default function ChecklistSidebar({ }) {
       <ChecklistBox checked={checkNum >= 5} selected={selectNum == 5} height={120} setCheck={setCheck(5)} titleText={'Start Mission'} content={<StartMissionBox />}/>
 
       <div style={{ height: 8 }} />
-    </aside>
+    </div>
   )
 }
 

@@ -86,3 +86,12 @@ button { font: inherit; }
   z-index: 0;
   outline: none;
 }
+
+.sidebarShell {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sidebarShell::-webkit-scrollbar {
+  display: none;
+}

@@ -20,7 +20,7 @@ export default function WaypointPlanBox({ }) {
         <header
         style={{
             display: 'grid',
-            gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)',
+            gridTemplateColumns: 'minmax(0,1fr)',
             alignItems: 'center',
             justifyItems: 'center',
             rowGap: 12,
@@ -28,8 +28,8 @@ export default function WaypointPlanBox({ }) {
         }}>
             <span style={lapBadge}>Laps: 3</span>
             <span style={lapBadge}>Lap Dist: 150 m</span>
-            <span style={lapBadge}>Waypoints: 5</span>
             <span style={lapBadge}>Total: 450 m</span>
+            <span style={lapBadge}>Waypoints: 5</span>
         </header>
         <div style={{height: 10}}></div>
         <div style={{gap: 10, display: 'flex', justifyContent: 'center', width: '92%', color: '#16a34a'}}>
