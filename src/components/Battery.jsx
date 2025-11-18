@@ -1,9 +1,9 @@
 import React from 'react'
 
 function levelColor(pct) {
-  if (pct >= 60) return '#22c55e' // green
-  if (pct >= 35) return '#eab308' // yellow
-  if (pct >= 15) return '#f97316' // orange
+  if (pct >= 60) return '#12e42e' // green
+  if (pct >= 35) return '#edbd10ff' // yellow
+  if (pct >= 15) return '#f95216ff' // orange
   return '#ef4444' // red
 }
 
@@ -55,7 +55,7 @@ export default function Battery({ soc = 100, width = 60, height = 24 }) {
           }}
         />
       </div>
-      <span style={{ fontVariantNumeric: 'tabular-nums', fontSize: 12 }}>{pct}%</span>
+      <span style={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, fontWeight: 700 }}>{pct}%</span>
     </div>
   )
 }

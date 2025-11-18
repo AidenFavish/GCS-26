@@ -12,7 +12,7 @@ export default function EStopStatus({ estopOn, armed }) {
   const isCritical = !estopOn && !!armed
   const shouldFlash = !!(estopOn == armed)
 
-  const bg = isSafe ? '#16a34a' : '#b91c1c'
+  const bg = isSafe ? 'var(--good-green)' : 'var(--bad-red)'
   const text = isSafe ? 'E-STOP ON' : 'E-STOP OFF'
 
   return (
@@ -21,13 +21,13 @@ export default function EStopStatus({ estopOn, armed }) {
       style={{
         background: bg,
         color: 'white',
-        padding: '6px 10px',
+        padding: '4px 6px 2px',
         borderRadius: 25,
         fontWeight: 700,
         letterSpacing: 1,
         minWidth: 120,
         textAlign: 'center',
-        boxShadow: isSafe ? 'inset 0 -2px 0 rgba(0,0,0,0.05)' : 'inset 0 -2px 0 rgba(0,0,0,0.95)',
+        fontFamily: 'Helvetica'
       }}
       title={isSafe ? 'E-STOP circuit OK' : isCritical ? 'E-STOP OFF while ARMED' : 'E-STOP OFF while DISARMED'}
     >
@@ -35,4 +35,3 @@ export default function EStopStatus({ estopOn, armed }) {
     </div>
   )
 }
-

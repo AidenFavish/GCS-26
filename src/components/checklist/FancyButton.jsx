@@ -37,7 +37,7 @@ function getContrastText(hex) {
   return luma > 0.6 ? '#111827' : '#ffffff'
 }
 
-export default function FancyButton({ label = 'Button', color = '#2563eb', minWidth=140, onClick, disabled = false, style }) {
+export default function FancyButton({ label = 'Button', color = 'var(--primary)', minWidth=140, onClick, disabled = false, style }) {
   const [hovered, setHovered] = React.useState(false)
   const [pressed, setPressed] = React.useState(false)
 

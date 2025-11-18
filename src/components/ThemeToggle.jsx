@@ -89,7 +89,7 @@ export default function ThemeTogglePill() {
             position: "absolute",
             opacity: isLight ? 0 : 1,
             transition: "opacity 0.2s ease",
-            color: "#3b82f6",
+            color: "var(--primary)",
           }}
         />
       </div>

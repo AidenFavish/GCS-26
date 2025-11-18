@@ -10,6 +10,7 @@ import { CircleArrowDown } from 'lucide-react'
 import ThemeTogglePill from './ThemeToggle'
 import { Cog } from 'lucide-react'
 import Payloads from './Payloads'
+import forgeLogo from '../assets/forge_print_yellow.png'
 
 function fmtTime(ts) {
   const d = new Date(ts)
@@ -25,7 +26,7 @@ export default function TopBar() {
     <header
       style={{
         display: 'grid',
-        gridTemplateColumns: 'minmax(0,2fr) minmax(0,1fr)',
+        gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)',
         alignItems: 'center',
         columnGap: 8,
         rowGap: 6,
@@ -37,13 +38,15 @@ export default function TopBar() {
         zIndex: 1000,
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 25, minWidth: 0, flex: 1 }}>
-        <strong style={{ color: 'var(--text)', minWidth: 180 }}>Ground Control Station</strong>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 25, minWidth: 0, flex: 1, height: 25 }}>
+        <img
+          src={forgeLogo}
+          alt="Forge Ground Control Station"
+          style={{ height: 50, objectFit: 'scale-down', minWidth: 180 }}
+        />
         <span style={{ color: 'var(--muted)', fontSize: 13, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 175 }}>
           Last refresh: {fmtTime(data.timestamp)}
         </span>
-        <ArmedStatus armed={data.armed} />
-        <EStopStatus estopOn={data.estopOn} armed={data.armed} />
         {captureEnabled && !offlineOnly && (
           <div
             className='download-pulse'
@@ -63,6 +66,10 @@ export default function TopBar() {
           </div>
         )}
       </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 25, justifySelf: 'center', flexWrap: 'wrap'}}>
+        <ArmedStatus armed={data.armed} />
+        <EStopStatus estopOn={data.estopOn} armed={data.armed} />
+      </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 25, justifySelf: 'end', flexWrap: 'wrap' }}>
         <Payloads />
         <Battery soc={data.batterySoc} />
@@ -71,14 +78,14 @@ export default function TopBar() {
           onClick={() => navigate('/settings')}
           style={{
             background: 'var(--primary)',
-            color: 'var(--button-text)',
+            color: 'var(--panel)',
             border: 0,
-            padding: '4px 8px',
-            borderRadius: 10,
+            padding: '1px 4px',
+            borderRadius: 20,
             cursor: 'pointer',
           }}
         >
-          <Cog size={25} style={{transform: 'translate(0px, 3px'}}/>
+          <Cog size={25} strokeWidth={3} style={{transform: 'translate(0px, 3px'}}/>
         </button>
       </div>
     </header>

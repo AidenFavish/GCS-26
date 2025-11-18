@@ -1,7 +1,8 @@
 import React from 'react'
-import SixPack from '../SixPack/SixPack'
 import { useNavigate } from 'react-router-dom'
 import ModeButton from '../ModeButton'
+import SixPack from '../SixPack/SixPack'
+import StatDisplay from '../StatDisplay/StatDisplay'
 
 export default function Sidebar({ waypoints }) {
   const navigate = useNavigate()
@@ -41,6 +42,9 @@ export default function Sidebar({ waypoints }) {
         <ModeButton mode='BRAKE'/>
         <ModeButton mode='GUIDED'/>
         <ModeButton mode='RTL'/>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 15, alignSelf: 'center', width: 'fit-content', flexWrap: 'wrap' }}>
+        <StatDisplay />
       </div>
       <SixPack />
       <div style={{ height: 8 }} />

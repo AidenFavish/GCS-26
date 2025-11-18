@@ -1,0 +1,346 @@
+.statDisplay {
+  --pitch-notch-inset: 42%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 8px 0px 8px;
+}
+
+.statDisplay-top {
+  display: grid;
+  grid-template-columns: minmax(92px, 1fr) minmax(0, 2fr) minmax(92px, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.attitudeModule {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.attitudeViewport {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0b1e39;
+  height: 200px;
+}
+
+.attitudeInner {
+  position: absolute;
+  inset: -35%;
+  transform-origin: 50% 50%;
+  transition: transform 0.35s ease-out;
+}
+
+.attitudeSky {
+  position: absolute;
+  inset: -200px -45%;
+  background: linear-gradient(180deg, #226bff 0%, #226bff 49%, #d96c00 51%, #d96c00 100%);
+  transition: transform 0.35s ease-out;
+}
+
+.attitudeHorizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  opacity: 0.5;
+}
+
+.attitudePitchMarks {
+  position: absolute;
+  inset: 0;
+}
+
+.pitchMark {
+  position: absolute;
+  left: var(--pitch-notch-inset);
+  right: var(--pitch-notch-inset);
+  height: 1px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.pitchMark-major {
+  height: 2px;
+  background: #fff;
+}
+
+.pitchMark-minor {
+  opacity: 0.5;
+}
+
+.pitchLabel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+
+.pitchLabel-left {
+  left: -24px;
+  text-align: right;
+}
+
+.pitchLabel-right {
+  right: -24px;
+  text-align: left;
+}
+
+.pitchMark-zero {
+  background: #fff;
+  height: 3px;
+}
+
+.attitudeReference {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.attitudeReadout {
+  margin-top: 6px;
+  display: 'grid';
+  align-self: center;
+  position: sticky;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 4px;
+}
+
+.reference-wing {
+  width: 34%;
+  height: 3px;
+  background: var(--primary);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+}
+
+.reference-wing-left {
+  border-top-left-radius: 4px;
+}
+
+.reference-wing-right {
+  border-top-right-radius: 4px;
+}
+
+.reference-center {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 3px solid var(--primary);
+  margin: 0 8px;
+}
+
+.tapeGauge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.tapeTitle {
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.tapeReadout {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fdfdfd;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tapeReadout small {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.tapeWindow {
+  width: 80%;
+  min-width: 50px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(10, 20, 40, 0.92);
+  position: relative;
+  overflow: hidden;
+}
+
+.tapeList {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 0;
+  transition: transform 0.45s ease-out;
+}
+
+.tapeTick {
+  position: relative;
+  height: 28px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tapeTick::before,
+.tapeTick::after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 12px;
+  background: rgba(255, 255, 255, 0.35);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tapeTick::before {
+  left: 8px;
+}
+
+.tapeTick::after {
+  right: 8px;
+}
+
+.tapeTick-major {
+  color: #fff;
+  font-weight: 600;
+}
+
+.tapeTick-major::before,
+.tapeTick-major::after {
+  width: 16px;
+  background: #fff;
+}
+
+.tapeCenterLine {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 50%;
+  height: 3px;
+  background: #f5c542;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.55);
+}
+
+.tapeGradient {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 45px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tapeGradient-top {
+  top: 0;
+  background: linear-gradient(180deg, rgba(6, 12, 30, 0.95) 0%, rgba(6, 12, 30, 0) 100%);
+}
+
+.tapeGradient-bottom {
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(6, 12, 30, 0.95) 0%, rgba(6, 12, 30, 0) 100%);
+}
+
+.compassArc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.compassHeading {
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: #fdfdfd;
+}
+
+.compassDial {
+  position: relative;
+  width: 100%;
+}
+
+.compassSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.compassBackground {
+  fill: rgba(8, 20, 46, 0.9);
+}
+
+.compassBorder {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 2;
+}
+
+.compassTick {
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 2;
+}
+
+.compassTick-cardinal {
+  stroke-width: 3;
+  stroke: #fff;
+}
+
+.compassLabel {
+  fill: #fdfdfd;
+  font-size: 12px;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.compassPointer {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 18px solid var(--primary);
+  transform: translate(-50%, 0);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+@media (max-width: 420px) {
+  .statDisplay-top {
+    grid-template-columns: 1fr;
+  }
+}
