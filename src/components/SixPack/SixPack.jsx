@@ -15,12 +15,8 @@ export default function SixPack() {
         gap: 10,
       }}
     >
-      <Compass />
       <HeartPulse />
-      <AltitudeGauge />
       <ThrottleGauge />
-      <SpeedGauge />
-      <AttitudeIndicator />
     </div>
   )
 }

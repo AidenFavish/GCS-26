@@ -11,6 +11,7 @@ import ThemeTogglePill from './ThemeToggle'
 import { Cog } from 'lucide-react'
 import Payloads from './Payloads'
 import forgeLogo from '../assets/forge_print_yellow.png'
+import FancyButton from './checklist/FancyButton'
 
 function fmtTime(ts) {
   const d = new Date(ts)
@@ -44,9 +45,7 @@ export default function TopBar() {
           alt="Forge Ground Control Station"
           style={{ height: 50, objectFit: 'scale-down', minWidth: 180 }}
         />
-        <span style={{ color: 'var(--muted)', fontSize: 13, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 175 }}>
-          Last refresh: {fmtTime(data.timestamp)}
-        </span>
+        <FancyButton label='Flight Checklist' onClick={() => navigate('/checklist')}/>
         {captureEnabled && !offlineOnly && (
           <div
             className='download-pulse'

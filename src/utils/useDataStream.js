@@ -32,6 +32,8 @@ export function useDataStream() {
     altitude: 10,
     throttle: 30,
     speed: 12,
+    groundspeed: 2,
+    climbspeed: 5,
     roll: 5,
     pitch: -2,
     heartbeat: 0,
@@ -51,6 +53,8 @@ export function useDataStream() {
         const newAlt = clamp(prev.altitude + Math.sin(t.current / 10) * 2 + smoothRand(0.8), 0, 5000)
         const newThr = clamp(prev.throttle + smoothRand(3), 0, 100)
         const newSpd = clamp(prev.speed + Math.sin(t.current / 8) * 0.4 + smoothRand(0.5), 0, 60)
+        const newGrdSpd = clamp(prev.groundspeed + Math.sin(t.current / 8) * 0.4 + smoothRand(0.5), 0, 60)
+        const newClimbSpd = clamp(prev.climbspeed + Math.sin(t.current / 8) * 0.4 + smoothRand(0.5), -60, 60)
         const newRoll = clamp(prev.roll + Math.sin(t.current / 12) * 1.2 + smoothRand(0.6), -45, 45)
         const newPitch = clamp(prev.pitch + Math.cos(t.current / 14) * 0.6 + smoothRand(0.4), -20, 20)
         let newSoc = prev.batterySoc - 0.02 + smoothRand(0.05)
@@ -91,6 +95,8 @@ export function useDataStream() {
           altitude: newAlt,
           throttle: newThr,
           speed: newSpd,
+          groundspeed: newGrdSpd,
+          climbspeed: newClimbSpd,
           roll: newRoll,
           pitch: newPitch,
           heartbeat: prev.heartbeat + 1,

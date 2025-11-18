@@ -21,23 +21,6 @@ export default function Sidebar({ waypoints }) {
         overscrollBehavior: 'contain',
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: 3 }}>
-        <button
-          onClick={() => navigate('/checklist')}
-          style={{
-            background: 'var(--primary)',
-            color: 'var(--button-text)',
-            border: 0,
-            padding: '8px 18px',
-            borderRadius: 12,
-            cursor: 'pointer',
-            fontWeight: 700,
-            fontSize: 18
-          }}
-        >
-          Flight Checklist
-        </button>
-      </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 15, alignSelf: 'center', width: 'fit-content', flexWrap: 'wrap' }}>
         <ModeButton mode='BRAKE'/>
         <ModeButton mode='GUIDED'/>

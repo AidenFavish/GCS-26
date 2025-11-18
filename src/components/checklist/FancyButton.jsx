@@ -37,14 +37,15 @@ function getContrastText(hex) {
   return luma > 0.6 ? '#111827' : '#ffffff'
 }
 
-export default function FancyButton({ label = 'Button', color = 'var(--primary)', minWidth=140, onClick, disabled = false, style }) {
+export default function FancyButton({ label = 'Button', color = 'var(--mode-button)', minWidth=140, onClick, disabled = false, style }) {
   const [hovered, setHovered] = React.useState(false)
   const [pressed, setPressed] = React.useState(false)
 
-  const bg = color
-  const bgHover = lighten(color, 14)
-  const bgActive = darken(color, 14)
-  const textColor = getContrastText(color)
+  var string_copy = (' ' + color).slice(1);
+  const bg = string_copy
+  const bgHover = lighten(bg, 70)
+  const bgActive = darken(bg, 70)
+  const textColor = getContrastText(bg)
 
   const baseStyle = {
     display: 'inline-flex',
@@ -54,19 +55,12 @@ export default function FancyButton({ label = 'Button', color = 'var(--primary)'
     padding: '5px 8px',
     minWidth: minWidth,
     borderRadius: 8,
-    border: `1px solid ${darken(color, 40)}`,
-    color: textColor,
+    border: `0px solid ${darken(color, 40)}`,
+    color: 'var(--primary)',
     background: hovered ? (pressed ? bgActive : bgHover) : bg,
-    boxShadow: pressed
-      ? `inset 0 2px 6px rgba(0,0,0,0.25)`
-      : `0 2px 6px rgba(0,0,0,0.12)`,
-    transform: pressed ? 'translateY(0px)' : hovered ? 'translateY(-1px)' : 'translateY(0px)',
-    transition: 'background 120ms ease, transform 120ms ease, box-shadow 120ms ease, filter 120ms ease',
+    transition: 'background 120ms ease',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.6 : 1,
-    userSelect: 'none',
-    WebkitTapHighlightColor: 'transparent',
-    outline: 'none',
     ...style,
   }
 
@@ -99,9 +93,6 @@ export default function FancyButton({ label = 'Button', color = 'var(--primary)'
           inset: 0,
           borderRadius: 12,
           pointerEvents: 'none',
-          background: hovered
-            ? 'linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0))'
-            : 'transparent',
           transition: 'background 120ms ease',
         }}
       />

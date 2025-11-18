@@ -73,16 +73,32 @@ const arcBorder = (() => {
   return `M ${startX} ${y} A ${RADIUS} ${RADIUS} 0 0 1 ${endX} ${y}`
 })()
 
-export default function CompassArc({ heading = 0 }) {
+function formatMetric(value, unit) {
+  if (!Number.isFinite(value)) return '--'
+  const rounded = Math.round(value)
+  return `${rounded}${unit}`
+}
+
+export default function CompassArc({ heading = 0, airspeed = 0, groundSpeed = 0 }) {
   const normalized = normalizeHeading(heading)
   const ticks = useMemo(() => buildTicks(normalized), [normalized])
   const labels = useMemo(() => buildLabels(normalized), [normalized])
-  const formattedHeading = Math.round(normalized).toString()
+  const formattedHeading = Math.round(normalized).toString().padStart(3, '0')
+  const airspeedLabel = formatMetric(airspeed, ' m/s')
+  const speedLabel = formatMetric(groundSpeed, ' m/s')
 
   return (
     <div className="compassArc">
       <div className="compassHeading">{formattedHeading}°</div>
       <div className="compassDial">
+        <div className="compassCorner compassCorner-left">
+          <span className="compassCorner-label">Airspeed</span>
+          <span className="compassCorner-value">{airspeedLabel}</span>
+        </div>
+        <div className="compassCorner compassCorner-right">
+          <span className="compassCorner-label">Groundspeed</span>
+          <span className="compassCorner-value">{speedLabel}</span>
+        </div>
         <svg className="compassSvg" viewBox={`0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`} role="img" aria-label="Heading compass">
           <path d={arcPath} className="compassBackground" />
           <path d={arcBorder} className="compassBorder" />
