@@ -5,9 +5,38 @@ import 'leaflet/dist/leaflet.css'
 import { useData } from '../context/DataContext'
 import { useTileCache } from '../context/TileCacheContext'
 
-function AutoCenter({ waypoints, fallback }) {
+const MAP_VIEW_COOKIE = 'gcs-map-view'
+const MAP_VIEW_COOKIE_MAX_AGE = 60 * 60 * 24 * 30
+
+function readMapViewCookie() {
+  if (typeof document === 'undefined') return null
+  const cookie = document.cookie
+    .split('; ')
+    .find((entry) => entry.startsWith(`${MAP_VIEW_COOKIE}=`))
+  if (!cookie) return null
+  const rawValue = cookie.split('=').slice(1).join('=')
+  try {
+    const parsed = JSON.parse(decodeURIComponent(rawValue))
+    if (!parsed || !Number.isFinite(parsed.lat) || !Number.isFinite(parsed.lng) || !Number.isFinite(parsed.zoom)) {
+      return null
+    }
+    return { lat: parsed.lat, lng: parsed.lng, zoom: parsed.zoom }
+  } catch {
+    return null
+  }
+}
+
+function writeMapViewCookie({ lat, lng, zoom }) {
+  if (typeof document === 'undefined') return
+  if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(zoom)) return
+  const payload = encodeURIComponent(JSON.stringify({ lat, lng, zoom }))
+  document.cookie = `${MAP_VIEW_COOKIE}=${payload}; Max-Age=${MAP_VIEW_COOKIE_MAX_AGE}; Path=/; SameSite=Lax`
+}
+
+function AutoCenter({ waypoints, fallback, enabled = true }) {
   const map = useMap()
   React.useEffect(() => {
+    if (!enabled) return
     if (!map) return
     if (!waypoints || waypoints.length === 0) {
       map.setView(fallback, 5)
@@ -19,7 +48,26 @@ function AutoCenter({ waypoints, fallback }) {
     }
     const bounds = waypoints.map((w) => [w.lat, w.lon])
     map.fitBounds(bounds, { padding: [30, 30] })
-  }, [map, waypoints, fallback])
+  }, [map, waypoints, fallback, enabled])
+  return null
+}
+
+function PersistMapView() {
+  const map = useMap()
+  React.useEffect(() => {
+    if (!map) return
+    const saveView = () => {
+      const center = map.getCenter()
+      writeMapViewCookie({ lat: center.lat, lng: center.lng, zoom: map.getZoom() })
+    }
+    map.on('moveend', saveView)
+    map.on('zoomend', saveView)
+    map.whenReady(saveView)
+    return () => {
+      map.off('moveend', saveView)
+      map.off('zoomend', saveView)
+    }
+  }, [map])
   return null
 }
 
@@ -69,9 +117,12 @@ const TARGET_FOCUS_ZOOM = 14
 export default function MapView({ waypoints, geofence = [] }) {
   const data = useData()
   const { captureEnabled, offlineOnly } = useTileCache()
+  const savedView = useMemo(() => readMapViewCookie(), [])
   const center = useMemo(() => {
     return waypoints.length > 0 ? [waypoints[waypoints.length - 1].lat, waypoints[waypoints.length - 1].lon] : [37.7749, -122.4194]
   }, [waypoints])
+  const initialCenter = savedView ? [savedView.lat, savedView.lng] : center
+  const initialZoom = savedView ? savedView.zoom : 6
 
   const targetPosition = useMemo(() => {
     if (waypoints.length > 0) {
@@ -104,9 +155,10 @@ export default function MapView({ waypoints, geofence = [] }) {
 
   return (
     <div style={{ width: '100%', flex: 1, minHeight: 0, height: mapHeight }}>
-      <MapContainer center={center} zoom={6} keyboard={false} style={{ height: '100%', width: '100%', outline: 'none' }}>
+      <MapContainer center={initialCenter} zoom={initialZoom} keyboard={false} style={{ height: '100%', width: '100%', outline: 'none' }}>
         <TileLayer url={tileUrl} attribution="&copy; OpenStreetMap contributors" />
-        <AutoCenter waypoints={waypoints} fallback={center} />
+        <PersistMapView />
+        <AutoCenter waypoints={waypoints} fallback={center} enabled={!savedView} />
         <SpacebarFocus target={targetPosition} zoom={TARGET_FOCUS_ZOOM} />
         {waypoints.map((wp, idx) => (
           <React.Fragment key={idx}>
