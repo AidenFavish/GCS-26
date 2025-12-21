@@ -37,7 +37,7 @@ function getContrastText(hex) {
   return luma > 0.6 ? '#111827' : '#ffffff'
 }
 
-export default function FancyButton({ label = 'Button', color = 'var(--mode-button)', minWidth=140, onClick, disabled = false, style }) {
+export default function FancyButton({ label = 'Button', icon, color = 'var(--mode-button)', minWidth=140, onClick, disabled = false, style }) {
   const [hovered, setHovered] = React.useState(false)
   const [pressed, setPressed] = React.useState(false)
 
@@ -95,8 +95,12 @@ export default function FancyButton({ label = 'Button', color = 'var(--mode-butt
           transition: 'background 120ms ease',
         }}
       />
+      {icon ? (
+        <span aria-hidden style={{ position: 'relative', zIndex: 1, display: 'inline-flex', alignItems: 'center' }}>
+          {icon}
+        </span>
+      ) : null}
       <span style={{ position: 'relative', zIndex: 1, fontWeight: 600 }}>{label}</span>
     </button>
   )
 }
-

@@ -13,6 +13,7 @@ import Payloads from './Payloads'
 import forgeLogo from '../assets/forge_print_yellow.png'
 import FancyButton from './checklist/FancyButton'
 import { useElementHeightVar } from '../hooks/useElementHeightVar'
+import { ClipboardCheck } from 'lucide-react'
 
 function fmtTime(ts) {
   const d = new Date(ts)
@@ -49,7 +50,7 @@ export default function TopBar() {
           alt="Forge Ground Control Station"
           style={{ height: 50, objectFit: 'scale-down', minWidth: 180 }}
         />
-        <FancyButton label='Flight Checklist' onClick={() => navigate('/checklist')}/>
+        <FancyButton label='Flight Checklist' icon={<ClipboardCheck size={20}/>} onClick={() => navigate('/checklist')}/>
         {captureEnabled && !offlineOnly && (
           <div
             className='download-pulse'
