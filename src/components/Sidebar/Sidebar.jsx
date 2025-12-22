@@ -4,7 +4,7 @@ import ModeButton from '../ModeButton'
 import SixPack from '../SixPack/SixPack'
 import StatDisplay from '../StatDisplay/StatDisplay'
 
-export default function Sidebar({ waypoints }) {
+export default function Sidebar() {
   const navigate = useNavigate()
   const availableHeight = 'calc(100vh - var(--top-bar-height))'
   return (

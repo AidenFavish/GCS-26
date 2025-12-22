@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from mavcore import MAVDevice
 from mavcore.messages import VFRHUD, GlobalPosition, Heartbeat, BatteryStatus, GPSRaw, MAVState, Attitude, StatusText, MAVSeverity, FlightMode, IntervalMessageID
 from mavcore.protocols import HeartbeatProtocol, SetModeProtocol, RequestMessageProtocol
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import asyncio
 import contextlib
 
@@ -51,7 +51,25 @@ class ChecklistBody(BaseModel):
 class ArmScriptBody(BaseModel):
     timestamp: str
 
+class WaypointBody(BaseModel):
+    latitude: float
+    longitude: float
+    altitude: float | None = 0.0
+
+class GeofencePointBody(BaseModel):
+    lat: float
+    lon: float
+
+class GeofenceBody(BaseModel):
+    name: str = ""
+    points: list[GeofencePointBody] = Field(default_factory=list)
+
+class PlanBody(BaseModel):
+    waypoints: list[WaypointBody] = Field(default_factory=list)
+    geofence: GeofenceBody | None = None
+
 websocket_connections: list[WebSocket] = []
+mission_plan = {"waypoints": [], "geofence": {"name": "", "points": []}}
 
 
 device = MAVDevice("udp:127.0.0.1:14550")
@@ -137,6 +155,38 @@ def armScript(body: ArmScriptBody) -> dict:
     print(body.timestamp + " arm script recieved")
 
     return {"ok": True, "timestamp": body.timestamp}
+
+
+@app.post("/api/plan")
+def set_plan(body: PlanBody) -> dict:
+    global mission_plan
+    mission_plan = {
+        "waypoints": [
+            {
+                "latitude": wp.latitude,
+                "longitude": wp.longitude,
+                "altitude": wp.altitude if wp.altitude is not None else 0.0,
+            }
+            for wp in body.waypoints
+        ],
+        "geofence": {
+            "name": body.geofence.name if body.geofence else "",
+            "points": [
+                {"lat": pt.lat, "lon": pt.lon}
+                for pt in (body.geofence.points if body.geofence else [])
+            ],
+        },
+    }
+    return {
+        "ok": True,
+        "waypoints": len(mission_plan["waypoints"]),
+        "geofence": mission_plan["geofence"]["name"],
+    }
+
+
+@app.get("/api/plan")
+def get_plan() -> dict:
+    return mission_plan
 
 
 @app.websocket("/telemetry")

@@ -3,13 +3,13 @@ import PlannerSidebar from '../components/Planner/PlannerSidebar'
 import MapView from '../components/MapView'
 import BottomBar from '../components/BottomBar'
 
-export default function PlanWaypoints({ savedWaypoints, geofence, onSend, onSetGeofence, onClearPlan }) {
+export default function PlanWaypoints() {
   return (
     <div className="app-shell">
-      <PlannerSidebar onSend={onSend} onSendGeofence={onSetGeofence} onClearPlan={onClearPlan} />
+      <PlannerSidebar />
       <main className="app-main">
         <div className="main-content">
-          <MapView waypoints={savedWaypoints} geofence={geofence} />
+          <MapView />
         </div>
         <BottomBar />
       </main>

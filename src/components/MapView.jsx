@@ -4,6 +4,8 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useData } from '../context/DataContext'
 import { useTileCache } from '../context/TileCacheContext'
+import { usePlannerPlan } from './Planner/PlannerSidebar'
+import { getPlan } from '../utils/api'
 
 const MAP_VIEW_COOKIE = 'gcs-map-view'
 const MAP_VIEW_COOKIE_MAX_AGE = 60 * 60 * 24 * 30
@@ -111,11 +113,18 @@ function SpacebarFocus({ target, zoom }) {
   return null
 }
 
-const WP_RADIUS_M = 75  // The waypoint radius in meters
+const WP_RADIUS_M = 30  // The waypoint radius in meters
 const TARGET_FOCUS_ZOOM = 14
 
-export default function MapView({ waypoints, geofence = [] }) {
+export default function MapView() {
   const data = useData()
+  const {
+    waypoints,
+    geofence,
+    setWaypoints,
+    setGeofence,
+    setGeofenceName,
+  } = usePlannerPlan()
   const { captureEnabled, offlineOnly } = useTileCache()
   const savedView = useMemo(() => readMapViewCookie(), [])
   const center = useMemo(() => {
@@ -152,6 +161,47 @@ export default function MapView({ waypoints, geofence = [] }) {
         : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
 
   const mapHeight = 'calc(100vh - var(--top-bar-height) - var(--bottom-bar-height))'
+
+  React.useEffect(() => {
+    let active = true
+    async function loadPlan() {
+      const payload = await getPlan()
+      if (!active || !payload || typeof payload !== 'object') return
+
+      const rawWaypoints = Array.isArray(payload.waypoints) ? payload.waypoints : []
+      const nextWaypoints = rawWaypoints
+        .map((wp) => {
+          const lat = parseFloat(wp.lat ?? wp.latitude)
+          const lon = parseFloat(wp.lon ?? wp.longitude)
+          const alt = parseFloat(wp.alt ?? wp.altitude)
+          if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null
+          return { lat, lon, alt: Number.isFinite(alt) ? alt : 0 }
+        })
+        .filter(Boolean)
+
+      const fence = payload.geofence
+      const rawFencePoints = Array.isArray(fence?.points) ? fence.points : (Array.isArray(fence) ? fence : [])
+      const nextFence = rawFencePoints
+        .map((pt) => {
+          const lat = parseFloat(pt.lat ?? pt.latitude)
+          const lon = parseFloat(pt.lon ?? pt.longitude)
+          if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null
+          return { lat, lon }
+        })
+        .filter(Boolean)
+
+      setWaypoints(nextWaypoints)
+      setGeofence(nextFence)
+      if (typeof fence?.name === 'string' && fence.name.length > 0) {
+        setGeofenceName(fence.name)
+      }
+    }
+
+    loadPlan()
+    return () => {
+      active = false
+    }
+  }, [setWaypoints, setGeofence, setGeofenceName])
 
   return (
     <div style={{ width: '100%', flex: 1, minHeight: 0, height: mapHeight }}>

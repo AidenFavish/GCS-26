@@ -1,6 +1,32 @@
-import React, { useMemo, useState } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GEOFENCES } from '../../utils/geofences'
+import { postPlan } from '../../utils/api'
+
+const PlannerContext = createContext(null)
+
+export function PlannerProvider({ children }) {
+  const [waypoints, setWaypoints] = useState([])
+  const [geofence, setGeofence] = useState([])
+  const [geofenceName, setGeofenceName] = useState('ARC Main Field West')
+
+  const value = useMemo(() => ({
+    waypoints,
+    setWaypoints,
+    geofence,
+    setGeofence,
+    geofenceName,
+    setGeofenceName,
+  }), [waypoints, geofence, geofenceName])
+
+  return <PlannerContext.Provider value={value}>{children}</PlannerContext.Provider>
+}
+
+export function usePlannerPlan() {
+  const ctx = useContext(PlannerContext)
+  if (!ctx) throw new Error('usePlannerPlan must be used within <PlannerProvider>')
+  return ctx
+}
 
 function FieldRow({ idx, value, onChange }) {
   function update(key, val) {
@@ -31,30 +57,62 @@ function FieldRow({ idx, value, onChange }) {
   )
 }
 
-export default function PlannerSidebar({ onSend, onSendGeofence, onClearPlan }) {
+export default function PlannerSidebar() {
   const navigate = useNavigate()
+  const {
+    waypoints,
+    setWaypoints,
+    setGeofence,
+    geofenceName,
+    setGeofenceName,
+  } = usePlannerPlan()
   const [rows, setRows] = useState([])
-  const [fenceName, setFenceName] = useState('ARC Main Field West')
   const fenceNames = useMemo(() => Object.keys(GEOFENCES), [])
   const availableHeight = 'calc(100vh - var(--top-bar-height))'
+
+  useEffect(() => {
+    if (rows.length > 0) return
+    if (!Array.isArray(waypoints) || waypoints.length === 0) return
+    setRows(
+      waypoints.map((wp) => ({
+        lat: Number.isFinite(wp.lat) ? String(wp.lat) : '',
+        lon: Number.isFinite(wp.lon) ? String(wp.lon) : '',
+        alt: Number.isFinite(wp.alt) ? String(wp.alt) : '',
+      }))
+    )
+  }, [rows.length, waypoints])
 
   function addRow() {
     setRows((r) => [...r, { lat: '', lon: '', alt: '' }])
   }
   function clearRows() {
     setRows([])
-    if (onClearPlan) onClearPlan()
+    setWaypoints([])
   }
   function updateRow(idx, next) {
     setRows((r) => r.map((x, i) => (i === idx ? next : x)))
   }
   function handleSend() {
-    const parsed = rows
+    const parsedWaypoints = rows
       .map((r) => ({ lat: parseFloat(r.lat), lon: parseFloat(r.lon), alt: parseFloat(r.alt) }))
       .filter((r) => Number.isFinite(r.lat) && Number.isFinite(r.lon))
       .map((r) => ({ lat: r.lat, lon: r.lon, alt: Number.isFinite(r.alt) ? r.alt : 0 }))
-    onSend(parsed)
-    if (onSendGeofence) onSendGeofence(GEOFENCES[fenceName] || [])
+    const fencePoints = GEOFENCES[geofenceName] || []
+    const payload = {
+      waypoints: parsedWaypoints.map((wp) => ({
+        latitude: wp.lat,
+        longitude: wp.lon,
+        altitude: wp.alt,
+      })),
+      geofence: {
+        name: geofenceName,
+        points: fencePoints.map((pt) => ({ lat: pt.lat, lon: pt.lon })),
+      },
+    }
+
+    setWaypoints(parsedWaypoints)
+    setGeofence(fencePoints)
+    postPlan(payload)
   }
 
   return (
@@ -83,8 +141,8 @@ export default function PlannerSidebar({ onSend, onSendGeofence, onClearPlan }) 
         <label style={{ fontSize: 12, color: 'var(--muted)' }}>Geofence</label>
         <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
           <select
-            value={fenceName}
-            onChange={(e) => setFenceName(e.target.value)}
+            value={geofenceName}
+            onChange={(e) => setGeofenceName(e.target.value)}
             style={{
               border: '1px solid var(--border)',
               borderRadius: 12,

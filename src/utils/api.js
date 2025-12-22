@@ -41,3 +41,33 @@ export async function postArmScriptAction(timestamp) {
     // console.warn('postChecklistAction failed', e)
   }
 }
+
+export async function postPlan(plan) {
+  try {
+    const url = BASE ? `${BASE}/api/plan` : '/api/plan'
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(plan),
+    })
+    if (!response.ok) throw new Error('Failed to post plan')
+    return await response.json()
+  } catch (e) {
+    // Swallow errors in dev; backend not required for UI responsiveness
+    // console.warn('postPlan failed', e)
+    return null
+  }
+}
+
+export async function getPlan() {
+  try {
+    const url = BASE ? `${BASE}/api/plan` : '/api/plan'
+    const response = await fetch(url)
+    if (!response.ok) throw new Error('Failed to fetch plan')
+    return await response.json()
+  } catch (e) {
+    // Swallow errors in dev; backend not required for UI responsiveness
+    // console.warn('getPlan failed', e)
+    return null
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { DataProvider } from './context/DataContext'
@@ -11,14 +11,15 @@ import Settings from './pages/Settings'
 import PlanWaypoints from './pages/PlanWaypoints'
 import BottomBar from './components/BottomBar'
 import Checklist from './pages/Checklist'
+import { PlannerProvider } from './components/Planner/PlannerSidebar'
 
-function GcsHome({ waypoints, geofence }) {
+function GcsHome() {
   return (
     <div className="app-shell">
-      <Sidebar waypoints={waypoints} />
+      <Sidebar />
       <main className="app-main">
         <div className="main-content">
-          <MapView waypoints={waypoints} geofence={geofence} />
+          <MapView />
         </div>
         <BottomBar />
       </main>
@@ -27,20 +28,20 @@ function GcsHome({ waypoints, geofence }) {
 }
 
 export default function App() {
-  const [waypoints, setWaypoints] = useState([])
-  const [geofence, setGeofence] = useState([])
   return (
     <BrowserRouter>
       <ThemeProvider>
         <TileCacheProvider>
           <DataProvider>
-            <TopBar />
-            <Routes>
-              <Route path="/" element={<GcsHome waypoints={waypoints} geofence={geofence} />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/plan" element={<PlanWaypoints savedWaypoints={waypoints} geofence={geofence} onSend={setWaypoints} onSetGeofence={setGeofence} onClearPlan={() => setWaypoints([])} />} />
-              <Route path="/checklist" element={<Checklist savedWaypoints={waypoints} geofence={geofence} />} />
-            </Routes>
+            <PlannerProvider>
+              <TopBar />
+              <Routes>
+                <Route path="/" element={<GcsHome />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/plan" element={<PlanWaypoints />} />
+                <Route path="/checklist" element={<Checklist />} />
+              </Routes>
+            </PlannerProvider>
           </DataProvider>
         </TileCacheProvider>
       </ThemeProvider>
