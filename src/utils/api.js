@@ -27,3 +27,17 @@ export async function postChecklistAction(section, item) {
     // console.warn('postChecklistAction failed', e)
   }
 }
+
+export async function postArmScriptAction(timestamp) {
+  try {
+    const url = BASE ? `${BASE}/api/arm-script` : '/api/arm-script'
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ timestamp }),
+    })
+  } catch (e) {
+    // Swallow errors in dev; backend not required for UI responsiveness
+    // console.warn('postChecklistAction failed', e)
+  }
+}

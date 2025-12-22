@@ -48,6 +48,9 @@ class ChecklistBody(BaseModel):
     section: str
     item: str
 
+class ArmScriptBody(BaseModel):
+    timestamp: str
+
 websocket_connections: list[WebSocket] = []
 
 
@@ -125,6 +128,15 @@ def checklist(body: ChecklistBody) -> dict:
     print(body.item + " recieved")
 
     return {"ok": True, "mode": body.item}
+
+
+@app.post("/api/arm-script")
+def armScript(body: ArmScriptBody) -> dict:
+    global device
+    pass  # TODO implement arm script check and implementation
+    print(body.timestamp + " arm script recieved")
+
+    return {"ok": True, "timestamp": body.timestamp}
 
 
 @app.websocket("/telemetry")
