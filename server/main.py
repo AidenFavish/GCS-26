@@ -114,7 +114,7 @@ def set_mode(body: ModeBody) -> dict:
     return {"ok": True, "mode": body.mode}
 
 
-@app.websocket("/ws/telemetry")
+@app.websocket("/telemetry")
 async def ws_telemetry(ws: WebSocket):
     await ws.accept()
     websocket_connections.append(ws)
@@ -134,11 +134,17 @@ def get_state() -> dict:
             'altitude': global_pos.alt_relative,
             'throttle': vfr.throttle,
             'speed': (vfr.climbspeed**2+global_pos.vx**2+global_pos.vy**2)**0.5,
+            'groundspeed': 2.0,
+            'climbspeed': 5.0,
             'roll': attitude.roll * 180.0 / 3.1415,
             'pitch': attitude.pitch * 180.0 / 3.1415,
             'heartbeat': heartbeat_id,
             'hb_hz': f"{calculate_hz():.2f} hz",
             'status': msg_to_send,
+            'telemConnected': True,
+            'jetsonConnected': True,
+            'bottleDropped': False,
+            'beaconDropped': False
             }
 
 @app.get("/")

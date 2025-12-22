@@ -73,19 +73,20 @@ const arcBorder = (() => {
   return `M ${startX} ${y} A ${RADIUS} ${RADIUS} 0 0 1 ${endX} ${y}`
 })()
 
-function formatMetric(value, unit) {
+function formatValue(value, unit) {
   if (!Number.isFinite(value)) return '--'
   const rounded = Math.round(value)
   return `${rounded}${unit}`
 }
 
-export default function CompassArc({ heading = 0, airspeed = 0, groundSpeed = 0 }) {
+export default function CompassArc({ heading = 0, airspeed = 0, groundSpeed = 0, speedUnit = 'm/s' }) {
   const normalized = normalizeHeading(heading)
   const ticks = useMemo(() => buildTicks(normalized), [normalized])
   const labels = useMemo(() => buildLabels(normalized), [normalized])
   const formattedHeading = Math.round(normalized).toString()
-  const airspeedLabel = formatMetric(airspeed, ' m/s')
-  const speedLabel = formatMetric(groundSpeed, ' m/s')
+  const unitLabel = speedUnit ? ` ${speedUnit}` : ''
+  const airspeedLabel = formatValue(airspeed, unitLabel)
+  const speedLabel = formatValue(groundSpeed, unitLabel)
 
   return (
     <div className="compassArc">

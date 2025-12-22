@@ -8,7 +8,7 @@ export function useBackendTelemetry() {
   const wsRef = useRef(null)
 
   useEffect(() => {
-    const url = (BACKEND_URL.replace(/\/$/, '')) + '/ws/telemetry'
+    const url = (BACKEND_URL.replace(/\/$/, '')) + '/telemetry'
     const wsUrl = url.replace('http', 'ws')
     const ws = new WebSocket(wsUrl)
     wsRef.current = ws
