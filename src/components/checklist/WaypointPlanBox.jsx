@@ -7,8 +7,15 @@ import FancyButton from './FancyButton'
 
 export default function WaypointPlanBox({ }) {
   const navigate = useNavigate();
-
+  const data = useData()
   const planner = () => navigate('/plan')
+
+  const statusIcon = (value) => {
+    if (value === true) {
+      return <CheckIcon size={20} style={{ color: 'var(--good-green)' }} />
+    }
+    return <XIcon size={20} style={{ color: 'var(--bad-red)' }} />
+  }
 
   return (
     <div>
@@ -26,15 +33,15 @@ export default function WaypointPlanBox({ }) {
             rowGap: 12,
             padding: '0px 0px',
         }}>
-            <span style={lapBadge}>Laps: 3</span>
-            <span style={lapBadge}>Lap Dist: 150 m</span>
-            <span style={lapBadge}>Total: 450 m</span>
-            <span style={lapBadge}>Waypoints: 5</span>
+            <span style={lapBadge}>Laps: {data.laps}</span>
+            <span style={lapBadge}>Lap Dist: {data.lapDist} m</span>
+            <span style={lapBadge}>Total: {data.total} m</span>
+            <span style={lapBadge}>Waypoints: {data.waypoints}</span>
         </header>
         <div style={{height: 10}}></div>
-        <div style={{gap: 10, display: 'flex', justifyContent: 'center', width: '92%', color: '#16a34a'}}>
+        <div style={{gap: 10, display: 'flex', justifyContent: 'center', width: '92%', color: data.geofenceEnabled ? 'var(--good-green)' : 'var(--bad-red)'}}>
             <span>Geofence Enabled</span>
-            <CheckIcon size={20} />
+            {statusIcon(data.geofenceEnabled)}
         </div>
         
     </div>

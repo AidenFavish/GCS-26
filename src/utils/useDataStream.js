@@ -48,7 +48,13 @@ export function useDataStream() {
     barometer: 0,
     cameraTest: 1,
     payloadTest: 2,
-    pdbTest: 0
+    pdbTest: 0,
+    laps: 0,
+    lapDist: 0,
+    total: 0,
+    waypoints: 0,
+    geofenceEnabled: 0,
+    armScript: 0
   }))
 
   const t = useRef(0)
@@ -122,7 +128,14 @@ export function useDataStream() {
           barometer: 0,
           cameraTest: 1,
           payloadTest: 2,
-          pdbTest: 0
+          pdbTest: 0,
+          pdbTest: 0,
+          laps: 0,
+          lapDist: 0,
+          total: 0,
+          waypoints: 0,
+          geofenceEnabled: 0,
+          armScript: 0
         }
       })
     }, 1000)

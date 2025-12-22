@@ -173,7 +173,14 @@ def get_state() -> dict:
             'barometer': 0,
             'cameraTest': 1,
             'payloadTest': 2,
-            'pdbTest': 0
+            'pdbTest': 0,
+            'pdbTest': 0,
+            'laps': 0,
+            'lapDist': 0,
+            'total': 0,
+            'waypoints': 0,
+            'geofenceEnabled': 0,
+            'armScript': 0
             }
 
 @app.get("/")

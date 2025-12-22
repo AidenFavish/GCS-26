@@ -8,8 +8,25 @@ import FancyButton from './FancyButton'
 export default function StandbyBox({ }) {
   const navigate = useNavigate();
   const [missionStarted, setMissionStarted] = useState(false)
+  const data = useData()
 
-  const toggleStarted = () => setMissionStarted(!missionStarted)
+
+  const statusIcon = (value) => {
+    if (value === 2) {
+      return <CheckIcon size={20} strokeWidth={4} style={{ color: 'var(--good-green)' }} />
+    }
+    if (value === 1) {
+      return (
+        <Loader2
+          size={20}
+          strokeWidth={3}
+          className="status-spinner"
+          style={{ color: '#f59e0b' }}
+        />
+      )
+    }
+    return <XIcon size={20} strokeWidth={4} style={{ color: 'var(--bad-red)' }} />
+  }
 
   return (
     <div style={{height: 10}}>
@@ -22,8 +39,8 @@ export default function StandbyBox({ }) {
           rowGap: 10,
           padding: '8px 12px',
         }}>
-          <FancyButton label={missionStarted ? 'Disarm Script':'Arm Script'} onClick={toggleStarted} />
-          {missionStarted ? <CheckIcon size={20} strokeWidth={4} style={{color: '#16a34a'}}/>:<XIcon size={20} strokeWidth={4} style={{color:'#b91c1c'}} />}
+          <FancyButton label={data.armScript == 0 ? 'Arm Script': (data.armScript == 1 ? 'loading': 'Disarm Script')} />
+          {statusIcon(data.armScript)}
       </header>
       <div style={{height: 5}}></div>
       <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: 12 }}>
