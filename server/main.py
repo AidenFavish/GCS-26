@@ -131,6 +131,15 @@ def checklist(body: ChecklistBody) -> dict:
 async def ws_telemetry(ws: WebSocket):
     await ws.accept()
     websocket_connections.append(ws)
+    try:
+        # Keep the connection open; client may not send messages.
+        while True:
+            await ws.receive()
+    except WebSocketDisconnect:
+        pass
+    finally:
+        if ws in websocket_connections:
+            websocket_connections.remove(ws)
 
 def get_state() -> dict:
     global msg_id, heartbeat_id, vfr, global_pos, heartbeat, batt, gps, attitude, msg_buffer
