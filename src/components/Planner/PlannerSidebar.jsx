@@ -28,6 +28,19 @@ export function usePlannerPlan() {
   return ctx
 }
 
+function takeLeadingDigits(value, digits) {
+  let count = 0
+  let out = ''
+  for (const ch of value) {
+    if (ch >= '0' && ch <= '9') {
+      count += 1
+    }
+    out += ch
+    if (count >= digits) break
+  }
+  return out
+}
+
 function FieldRow({ idx, value, onChange }) {
   function update(key, val) {
     onChange(idx, { ...value, [key]: val })
@@ -83,7 +96,25 @@ export default function PlannerSidebar() {
   }, [rows.length, waypoints])
 
   function addRow() {
-    setRows((r) => [...r, { lat: '', lon: '', alt: '' }])
+    setRows((r) => {
+      const last = r[r.length - 1]
+      if (!last) return [...r, { lat: '', lon: '', alt: '' }]
+      const lat = String(last.lat ?? '').trim()
+      const lon = String(last.lon ?? '').trim()
+      const alt = String(last.alt ?? '').trim()
+      const hasPrev = lat !== '' && lon !== ''
+      const next = {
+        lat: '',
+        lon: '',
+        alt: '',
+      }
+      if (hasPrev) {
+        next.lat = takeLeadingDigits(lat, 8)
+        next.lon = takeLeadingDigits(lon, 8)
+        next.alt = alt
+      }
+      return [...r, next]
+    })
   }
   function clearRows() {
     setRows([])
