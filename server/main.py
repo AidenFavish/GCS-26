@@ -1,9 +1,9 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import time
 from fastapi.middleware.cors import CORSMiddleware
-from pymavkit import MAVDevice
-from pymavkit.messages import VFRHUD, GlobalPosition, Heartbeat, BatteryStatus, GPSRaw, MAVState, Attitude, StatusText, MAVSeverity, FlightMode, IntervalMessageID
-from pymavkit.protocols import HeartbeatProtocol, SetModeProtocol, RequestMessageProtocol
+from mavcore import MAVDevice
+from mavcore.messages import VFRHUD, GlobalPosition, Heartbeat, BatteryStatus, GPSRaw, MAVState, Attitude, StatusText, MAVSeverity, FlightMode, IntervalMessageID
+from mavcore.protocols import HeartbeatProtocol, SetModeProtocol, RequestMessageProtocol
 from pydantic import BaseModel
 import asyncio
 import contextlib
@@ -43,6 +43,10 @@ def msg_cb(msg):
 
 class ModeBody(BaseModel):
     mode: str
+
+class ChecklistBody(BaseModel):
+    section: str
+    item: str
 
 websocket_connections: list[WebSocket] = []
 
@@ -114,6 +118,15 @@ def set_mode(body: ModeBody) -> dict:
     return {"ok": True, "mode": body.mode}
 
 
+@app.post("/api/checklist")
+def checklist(body: ChecklistBody) -> dict:
+    global device
+    pass  # TODO implement checklist check and implementation
+    print(body.item + " recieved")
+
+    return {"ok": True, "mode": body.item}
+
+
 @app.websocket("/telemetry")
 async def ws_telemetry(ws: WebSocket):
     await ws.accept()
@@ -144,7 +157,14 @@ def get_state() -> dict:
             'telemConnected': True,
             'jetsonConnected': True,
             'bottleDropped': False,
-            'beaconDropped': False
+            'beaconDropped': False,
+            'accelerometer': 0,
+            'compass': 1,
+            'level': 2,
+            'barometer': 0,
+            'cameraTest': 1,
+            'payloadTest': 2,
+            'pdbTest': 0
             }
 
 @app.get("/")

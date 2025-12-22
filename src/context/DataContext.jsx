@@ -5,7 +5,7 @@ import { useBackendTelemetry } from '../utils/useBackendTelemetry'
 const DataContext = createContext(null)
 
 export function DataProvider({ children }) {
-  const useBackend = false;  // Go to useBackendTelemetry to change port
+  const useBackend = true;  // Go to useBackendTelemetry to change port
   const data = useBackend ? useBackendTelemetry() : useDataStream()
   if (useBackend && (data == null || data.timestamp == null)) {
     return (

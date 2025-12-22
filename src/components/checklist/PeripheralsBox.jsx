@@ -1,12 +1,28 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Wifi, WifiOff, XIcon, CheckIcon } from 'lucide-react'
+import { CheckIcon, Loader2, XIcon } from 'lucide-react'
 import { useData } from '../../context/DataContext'
-import { useState, useEffect } from "react";
+import { postChecklistAction } from '../../utils/api'
 import FancyButton from './FancyButton'
 
 export default function PeripheralsBox({ }) {
-  const navigate = useNavigate();
+  const data = useData()
+
+  const statusIcon = (value) => {
+    if (value === 2) {
+      return <CheckIcon size={20} strokeWidth={4} style={{ color: 'var(--good-green)' }} />
+    }
+    if (value === 1) {
+      return (
+        <Loader2
+          size={20}
+          strokeWidth={3}
+          className="status-spinner"
+          style={{ color: '#f59e0b' }}
+        />
+      )
+    }
+    return <XIcon size={20} strokeWidth={4} style={{ color: 'var(--bad-red)' }} />
+  }
 
   return (
     <header
@@ -18,12 +34,21 @@ export default function PeripheralsBox({ }) {
         rowGap: 10,
         padding: '8px 12px',
       }}>
-        <FancyButton label='Test Camera' />
-        <CheckIcon size={20} strokeWidth={4} style={{color: '#16a34a'}}/>
-        <FancyButton label='Test Payload' />
-        <CheckIcon size={20} strokeWidth={4} style={{color: '#16a34a'}}/>
-        <FancyButton label='Test PDB' />
-        <CheckIcon size={20} strokeWidth={4} style={{color: '#16a34a'}}/>
+        <FancyButton
+          label='Test Camera'
+          onClick={() => postChecklistAction('peripherals', 'cameraTest')}
+        />
+        {statusIcon(data.cameraTest)}
+        <FancyButton
+          label='Test Payload'
+          onClick={() => postChecklistAction('peripherals', 'payloadTest')}
+        />
+        {statusIcon(data.payloadTest)}
+        <FancyButton
+          label='Test PDB'
+          onClick={() => postChecklistAction('peripherals', 'pdbTest')}
+        />
+        {statusIcon(data.pdbTest)}
     </header>
   )
 }

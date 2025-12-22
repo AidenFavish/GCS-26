@@ -28,3 +28,9 @@ npm run dev
 ```bash
 uvicorn server.main:app --reload --port 8000
 ```
+
+or
+
+```bash
+python3 -m uvicorn server.main:app --reload --port 8000
+```

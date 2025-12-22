@@ -79,6 +79,14 @@ body {
   animation: download-pulse 1.0s ease-in-out infinite;
 }
 
+@keyframes status-spin {
+  to { transform: rotate(360deg); }
+}
+
+.status-spinner {
+  animation: status-spin 0.9s linear infinite;
+}
+
 button { font: inherit; }
 
 /* Ensure Leaflet never overlays the sticky top bar */

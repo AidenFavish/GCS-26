@@ -41,7 +41,14 @@ export function useDataStream() {
     telemConnected: true,
     jetsonConnected: true,
     bottleDropped: false,
-    beaconDropped: false
+    beaconDropped: false,
+    accelerometer: 0,
+    compass: 1,
+    level: 2,
+    barometer: 0,
+    cameraTest: 1,
+    payloadTest: 2,
+    pdbTest: 0
   }))
 
   const t = useRef(0)
@@ -108,7 +115,14 @@ export function useDataStream() {
           telemConnected: flipTelemConnected,
           jetsonConnected: flipJetsonConnected,
           bottleDropped: flipBottleDropped,
-          beaconDropped: flipBeaconDropped
+          beaconDropped: flipBeaconDropped,
+          accelerometer: 0,
+          compass: 1,
+          level: 2,
+          barometer: 0,
+          cameraTest: 1,
+          payloadTest: 2,
+          pdbTest: 0
         }
       })
     }, 1000)
