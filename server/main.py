@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import asyncio
 import contextlib
-from telemetry import Telemetry
+from .telemetry import Telemetry
 
 telem = Telemetry()
 
@@ -42,6 +42,8 @@ loop_task: asyncio.Task | None = None
 
 async def lifespan(app: FastAPI):
     global loop_task
+
+    print("Starting brodcast...")
     # Start the broadcast loop within the server's event loop
     loop_task = asyncio.create_task(main_loop())
     try:

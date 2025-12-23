@@ -16,7 +16,9 @@ class Telemetry:
 
         self.mission_plan = {"waypoints": [], "geofence": {"name": "", "points": []}}
 
-    def update(self):
+        self.start_updates()
+
+    def start_updates(self):
         ## protocols
         self.hb_protocol = self.device.run_protocol(HeartbeatProtocol())
 
@@ -107,14 +109,7 @@ class Telemetry:
             mode = FlightMode[mode_str.upper()]
         except:
             mode = FlightMode.RTL
-            
+
         set_mode_protocol = SetModeProtocol(mode)
         self.device.run_protocol(set_mode_protocol)
         print(set_mode_protocol.ack_msg)
-
-
-    
-
-
-
-    
