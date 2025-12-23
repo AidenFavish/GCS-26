@@ -79,16 +79,18 @@ def set_mode(body: ModeBody) -> dict:
 
 @app.post("/api/checklist")
 def checklist(body: ChecklistBody) -> dict:
-    global device
-    pass  # TODO implement checklist check and implementation
-    print(body.item + " recieved")
+    if body.section.lower() == "calibrations":
+        telem.calibrate(body.item)
+    elif body.section.lower() == "peripherals":
+        telem.test_peripheral(body.item)
+    else:
+        print(f"{body.item} inside {body.section} recieved but not mapped.")
 
-    return {"ok": True, "mode": body.item}
+    return {"ok": True, "item": body.item}
 
 
 @app.post("/api/arm-script")
 def armScript(body: ArmScriptBody) -> dict:
-    global device
     pass  # TODO implement arm script check and implementation
     print(body.timestamp + " arm script recieved")
 

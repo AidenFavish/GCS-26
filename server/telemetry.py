@@ -113,3 +113,9 @@ class Telemetry:
         set_mode_protocol = SetModeProtocol(mode)
         self.device.run_protocol(set_mode_protocol)
         print(set_mode_protocol.ack_msg)
+
+    def calibrate(self, item: str):
+        pass
+
+    def test_peripheral(self, item: str):
+        pass
