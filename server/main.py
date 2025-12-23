@@ -1,45 +1,12 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import time
 from fastapi.middleware.cors import CORSMiddleware
-from mavcore import MAVDevice
-from mavcore.messages import VFRHUD, GlobalPosition, Heartbeat, BatteryStatus, GPSRaw, MAVState, Attitude, StatusText, MAVSeverity, FlightMode, IntervalMessageID
-from mavcore.protocols import HeartbeatProtocol, SetModeProtocol, RequestMessageProtocol
 from pydantic import BaseModel, Field
 import asyncio
 import contextlib
+from telemetry import Telemetry
 
-BUFFER_SIZE = 5
-heartbeat_timestamps = []
-msg_id = 0
-heartbeat_id = 0
-
-def heartbeat_cb(mavMsg):
-    global heartbeat_timestamps, BUFFER_SIZE, heartbeat_id
-    heartbeat_id += 1
-    heartbeat_timestamps.insert(0, mavMsg.timestamp / 1000.0)
-    if len(heartbeat_timestamps) > BUFFER_SIZE:
-        heartbeat_timestamps.pop()
-
-def calculate_avg(l: list) -> float:
-    Sum = 0.0
-    for i in range(len(l) - 1):
-        Sum += l[i] - l[i + 1]
-    return Sum / (len(l) - 1)
-
-def calculate_hz() -> float:
-    global heartbeat_timestamps
-    if len(heartbeat_timestamps) > 1:
-        avg = calculate_avg(heartbeat_timestamps)
-        if avg < time.time() - heartbeat_timestamps[0]:
-            avg = calculate_avg([time.time(), *heartbeat_timestamps])
-        return 1.0 / avg
-    else:
-        return -1.0
-    
-msg_buffer = ""
-def msg_cb(msg):
-    global msg_buffer
-    msg_buffer += msg.text + "\n"
+telem = Telemetry()
 
 class ModeBody(BaseModel):
     mode: str
@@ -69,29 +36,6 @@ class PlanBody(BaseModel):
     geofence: GeofenceBody | None = None
 
 websocket_connections: list[WebSocket] = []
-mission_plan = {"waypoints": [], "geofence": {"name": "", "points": []}}
-
-
-device = MAVDevice("udp:127.0.0.1:14550")
-
-## protocols
-hb_protocol = device.run_protocol(HeartbeatProtocol())
-
-# listeners
-vfr = VFRHUD()
-global_pos = GlobalPosition()
-heartbeat = Heartbeat(heartbeat_cb)
-batt = BatteryStatus()
-gps = GPSRaw()
-attitude = Attitude()
-status_text = StatusText("", MAVSeverity.INFO, msg_cb)
-device.add_listener(vfr)
-device.add_listener(global_pos)
-device.add_listener(heartbeat)
-device.add_listener(batt)
-device.add_listener(gps)
-device.add_listener(attitude)
-device.add_listener(status_text)
 
 # Manage background tasks using FastAPI lifespan (on_event deprecated)
 loop_task: asyncio.Task | None = None
@@ -127,15 +71,7 @@ def health() -> dict:
 
 @app.post("/api/mode")
 def set_mode(body: ModeBody) -> dict:
-    global device
-    try:
-        mode = FlightMode[body.mode.upper()]
-    except:
-        mode = FlightMode.RTL
-    set_mode_protocol = SetModeProtocol(mode)
-    a = device.run_protocol(set_mode_protocol)
-    print(set_mode_protocol.ack_msg)
-
+    telem.set_mode(body.mode)
     return {"ok": True, "mode": body.mode}
 
 
@@ -159,7 +95,6 @@ def armScript(body: ArmScriptBody) -> dict:
 
 @app.post("/api/plan")
 def set_plan(body: PlanBody) -> dict:
-    global mission_plan
     mission_plan = {
         "waypoints": [
             {
@@ -177,6 +112,7 @@ def set_plan(body: PlanBody) -> dict:
             ],
         },
     }
+    telem.mission_plan = mission_plan
     return {
         "ok": True,
         "waypoints": len(mission_plan["waypoints"]),
@@ -186,7 +122,7 @@ def set_plan(body: PlanBody) -> dict:
 
 @app.get("/api/plan")
 def get_plan() -> dict:
-    return mission_plan
+    return telem.mission_plan
 
 
 @app.websocket("/telemetry")
@@ -203,56 +139,14 @@ async def ws_telemetry(ws: WebSocket):
         if ws in websocket_connections:
             websocket_connections.remove(ws)
 
-def get_state() -> dict:
-    global msg_id, heartbeat_id, vfr, global_pos, heartbeat, batt, gps, attitude, msg_buffer
-    msg_to_send = msg_buffer
-    msg_buffer = ""
-    return {'timestamp': time.time() * 1000.0,
-            'batterySoc': batt.soc,
-            'armed': heartbeat.isArmed(),
-            'estopOn': True,
-            'mode': heartbeat.mode.name,
-            'currentLat': global_pos.lat,
-            'currentLon': global_pos.lon,
-            'heading': vfr.heading_int,
-            'altitude': global_pos.alt_relative,
-            'throttle': vfr.throttle,
-            'speed': (vfr.climbspeed**2+global_pos.vx**2+global_pos.vy**2)**0.5,
-            'groundspeed': 2.0,
-            'climbspeed': 5.0,
-            'roll': attitude.roll * 180.0 / 3.1415,
-            'pitch': attitude.pitch * 180.0 / 3.1415,
-            'heartbeat': heartbeat_id,
-            'hb_hz': f"{calculate_hz():.2f} hz",
-            'status': msg_to_send,
-            'telemConnected': True,
-            'jetsonConnected': True,
-            'bottleDropped': False,
-            'beaconDropped': False,
-            'accelerometer': 0,
-            'compass': 1,
-            'level': 2,
-            'barometer': 0,
-            'cameraTest': 1,
-            'payloadTest': 2,
-            'pdbTest': 0,
-            'pdbTest': 0,
-            'laps': 0,
-            'lapDist': 0,
-            'total': 0,
-            'waypoints': 0,
-            'geofenceEnabled': 0,
-            'armScript': 0
-            }
-
 @app.get("/")
 def root():
-    return {"message": "wassup"}
+    return {"message": "hello!"}
 
 async def broadcast() -> None:
         if not websocket_connections:
             return
-        payload = get_state()
+        payload = telem.get_state()
         # Send to all; drop dead sockets
         dead: list[WebSocket] = []
         for ws in websocket_connections:
