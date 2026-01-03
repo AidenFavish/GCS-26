@@ -4,7 +4,7 @@ import { Wifi, WifiOff, XIcon, CheckIcon } from 'lucide-react'
 import { useElementHeightVar } from '../hooks/useElementHeightVar'
 
 export default function BottomBar() {
-  const { statusMessages } = useData()
+  const { statusMessages, jetsonMessages } = useData()
   const data = useData()
   const listRef = useRef(null)
   const listRef2 = useRef(null)
@@ -28,7 +28,7 @@ export default function BottomBar() {
     if (nearBottom) {
       el.scrollTop = el.scrollHeight
     }
-  }, [statusMessages])
+  }, [jetsonMessages])
 
   // On page load, auto scroll to bottom
   useEffect(() => {
@@ -103,12 +103,12 @@ export default function BottomBar() {
             background: 'var(--panel)',
           }}
         >
-          {statusMessages.map((msg, idx) => (
+          {jetsonMessages.map((msg, idx) => (
             <div key={idx} style={{ color: 'var(--text)', fontSize: 13 }}>
               {msg}
             </div>
           ))}
-          {statusMessages.length === 0 && (
+          {jetsonMessages.length === 0 && (
             <div style={{ color: 'var(--muted)', fontSize: 13 }}>No status yet…</div>
           )}
         </div>

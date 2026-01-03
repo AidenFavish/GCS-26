@@ -4,8 +4,8 @@ from mavcore.protocols import HeartbeatProtocol, SetModeProtocol, RequestMessage
 import time
 
 class Telemetry:
-    def __init__(self) -> None:
-        self.device = MAVDevice("udp:127.0.0.1:14550")
+    def __init__(self, address:str = "udp:127.0.0.1:14550", baud:int = 115200) -> None:
+        self.device = MAVDevice(address, baud, source_system=255, source_component=3)
 
         self.BUFFER_SIZE = 5
         self.heartbeat_timestamps = []
@@ -13,6 +13,7 @@ class Telemetry:
         self.heartbeat_id = 0
 
         self.msg_buffer = ""
+        self.jetson_buffer = ""
 
         self.mission_plan = {"waypoints": [], "geofence": {"name": "", "points": []}}
 
@@ -41,6 +42,8 @@ class Telemetry:
     def get_state(self) -> dict:
         msg_to_send = self.msg_buffer
         self.msg_buffer = ""
+        jetson_msg = self.jetson_buffer
+        self.jetson_buffer = ""
         return {'timestamp': time.time() * 1000.0,
                 'batterySoc': self.batt.soc,
                 'armed': self.heartbeat.isArmed(),
@@ -59,6 +62,7 @@ class Telemetry:
                 'heartbeat': self.heartbeat_id,
                 'hb_hz': f"{self.calculate_hz():.2f} hz",
                 'status': msg_to_send,
+                'jetsonMsg': jetson_msg,
                 'telemConnected': True,
                 'jetsonConnected': True,
                 'bottleDropped': False,

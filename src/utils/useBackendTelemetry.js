@@ -21,6 +21,11 @@ export function useBackendTelemetry() {
           const newStatus = msg.status
           const shouldAppend = typeof newStatus === 'string' ? newStatus.length > 0 : Boolean(newStatus)
 
+          // jetson status messages
+          const prevJetsonStatus = (prev && prev.jetsonMessages) || []
+          const newJetsonStatus = msg.jetsonMsg
+          const shouldAppendJetson = typeof newJetsonStatus === 'string' ? newJetsonStatus.length > 0 : Boolean(newJetsonStatus)
+
           // Build/extend position track from currentLat/currentLon in messages
           const prevTrack = (prev && prev.positionTrack) || []
           const hasLat = Number.isFinite(msg.currentLat)
@@ -36,6 +41,7 @@ export function useBackendTelemetry() {
             return {
               ...msg,
               statusMessages: shouldAppend ? [newStatus] : [],
+              jetsonMessages: shouldAppendJetson ? [newJetsonStatus]: [],
               positionTrack: nextTrack,
             }
           }
@@ -44,6 +50,7 @@ export function useBackendTelemetry() {
             ...prev,
             ...msg,
             statusMessages: shouldAppend ? [...prevStatus, newStatus].slice(-300) : prevStatus, // keep last 300
+            jetsonMessages: shouldAppendJetson ? [...prevJetsonStatus, newJetsonStatus].slice(-300) : prevJetsonStatus,
             positionTrack: nextTrack,
           }
         })

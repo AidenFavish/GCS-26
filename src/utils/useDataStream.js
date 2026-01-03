@@ -25,6 +25,7 @@ export function useDataStream() {
     estopOn: true,
     mode: 'GUIDED',
     statusMessages: [],
+    jetsonMessages: [],
     currentLat: 37.7749,
     currentLon: -122.4194,
     positionTrack: [],
@@ -80,6 +81,10 @@ export function useDataStream() {
         const nextMsg = `Status #${prev.heartbeat + 1}`
         const msgs = [...prev.statusMessages, nextMsg]
         if (msgs.length > 300) msgs.shift()
+
+        const nextMsg2 = `Jetson Status #${prev.heartbeat + 1}`
+        const jetson_msgs = [...prev.jetsonMessages, nextMsg2]
+        if (jetson_msgs.length > 300) jetson_msgs.shift()
         // Integrate position using speed and heading
         const rad = (Math.PI / 180) * newHeading
         const meters = newSpd // per second
@@ -105,6 +110,7 @@ export function useDataStream() {
           estopOn: flipEstop,
           mode: prev.mode,
           statusMessages: msgs,
+          jetsonMessages: jetson_msgs,
           currentLat: newLat,
           currentLon: newLon,
           positionTrack: newTrack,
